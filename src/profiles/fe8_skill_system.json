@@ -1,0 +1,107 @@
+{
+  "profile_id": "fe8_skill_system_v1",
+  "display_name": "FE8 Skill System (SkillSys 2023+)",
+  "game": "fe8",
+  "region": "US",
+  "tier": "B",
+  "base_hack": "skill_system",
+  "hashes": {
+    "sha1": [],
+    "crc32": [],
+    "note": "Skill System builds vary; detection uses secondary signatures below"
+  },
+  "secondary_signatures": [
+    {
+      "description": "Skill System engine signature",
+      "address": 1048576,
+      "bytes": "placeholder_skill_sys_magic_bytes",
+      "note": "Replace with actual bytes found in SkillSys builds at a known offset"
+    }
+  ],
+  "rom_size_range": [16777216, 33554432],
+
+  "tables": {
+    "characters": {
+      "address": null,
+      "pointer_address": 8041200,
+      "count": 255,
+      "entry_size": 52,
+      "layout": "fe8_char_skillsys"
+    },
+    "classes": {
+      "address": null,
+      "pointer_address": 8041204,
+      "count": 255,
+      "entry_size": 88,
+      "layout": "fe8_class_skillsys"
+    },
+    "items": {
+      "address": null,
+      "pointer_address": 8041208,
+      "count": 255,
+      "entry_size": 40,
+      "layout": "fe8_item_skillsys"
+    },
+    "skills": {
+      "address": null,
+      "pointer_address": 8041220,
+      "count": 255,
+      "entry_size": 16,
+      "layout": "fe8_skill_table",
+      "note": "v2 target — not edited in v1"
+    }
+  },
+
+  "characters": {
+    "1":  {"name": "Eirika",    "portrait": "eirika.png",    "is_lord": true,  "is_required": true},
+    "2":  {"name": "Seth",      "portrait": "seth.png",      "is_lord": false, "is_required": false},
+    "3":  {"name": "Gilliam",   "portrait": "gilliam.png",   "is_lord": false, "is_required": false},
+    "4":  {"name": "Franz",     "portrait": "franz.png",     "is_lord": false, "is_required": false},
+    "5":  {"name": "Moulder",   "portrait": "moulder.png",   "is_lord": false, "is_required": false},
+    "6":  {"name": "Vanessa",   "portrait": "vanessa.png",   "is_lord": false, "is_required": false},
+    "7":  {"name": "Ross",      "portrait": "ross.png",      "is_lord": false, "is_required": false},
+    "8":  {"name": "Garcia",    "portrait": "garcia.png",    "is_lord": false, "is_required": false},
+    "9":  {"name": "Neimi",     "portrait": "neimi.png",     "is_lord": false, "is_required": false},
+    "10": {"name": "Colm",      "portrait": "colm.png",      "is_lord": false, "is_required": false},
+    "15": {"name": "Ephraim",   "portrait": "ephraim.png",   "is_lord": true,  "is_required": true}
+  },
+
+  "rules": {
+    "required_character_ids": [1, 15],
+    "lord_character_ids": [1, 15],
+    "thief_character_ids": [10],
+    "dancer_character_ids": [22],
+    "gender_locked_classes": {
+      "female_only": [],
+      "male_only": []
+    },
+    "monster_class_ids": [],
+    "lord_class_ids": [0, 1],
+    "trainee_class_ids": []
+  },
+
+  "feature_flags": {
+    "supports_class_randomization": true,
+    "supports_bases_randomization": true,
+    "supports_growths_randomization": true,
+    "supports_ranks_randomization": true,
+    "supports_inventory_randomization": false,
+    "supports_recruitment_shuffle": false,
+    "supports_skill_tables": false,
+    "supports_cosmetic_randomization": false,
+    "note": "v1: skill-compatible but not skill-aware. Does not touch skill data regions."
+  },
+
+  "protected_regions": [
+    {
+      "description": "Skill engine code",
+      "start": 1048576,
+      "end": 1310720
+    },
+    {
+      "description": "Skill data tables",
+      "start": 8041220,
+      "end": 8045316
+    }
+  ]
+}
