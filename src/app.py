@@ -1,5 +1,4 @@
-"""
-FEGBA Randomizer — Main Application Entry Point
+"""FEGBA Randomizer — Main Application Entry Point
 Fire Emblem GBA Character Randomizer (FE6/FE7/FE8 + Skill System)
 """
 import sys
@@ -8,15 +7,25 @@ import os
 # Ensure src package is importable
 src_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.dirname(src_dir)
+
+# Add both root_dir and src_dir to sys.path for flexibility
 if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
 
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QFont
 
-from src.ui.models.app_state import AppState
-from src.ui.main_window import MainWindow
+# Try importing with different path configurations
+try:
+    from src.ui.models.app_state import AppState
+    from src.ui.main_window import MainWindow
+except ImportError:
+    # Fallback: try importing directly if src is in path
+    from ui.models.app_state import AppState
+    from ui.main_window import MainWindow
 
 
 def main():
