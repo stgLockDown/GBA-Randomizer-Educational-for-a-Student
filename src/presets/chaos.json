@@ -1,0 +1,30 @@
+{
+  "name": "Chaos",
+  "description": "Maximum randomization. All bets are off — classes fully random, stats wildly varied, no preservation of totals. Not for the faint of heart.",
+  "version": "1.0",
+  "settings": {
+    "class_mode": "random",
+    "keep_lords": false,
+    "keep_thieves": false,
+    "keep_dancers": false,
+    "respect_gender": false,
+    "exclude_monsters": false,
+    "max_class_copies": 0,
+    "bases_mode": "random",
+    "bases_variance": 10,
+    "bases_preserve_total": false,
+    "bases_min": 0,
+    "bases_max": 40,
+    "growths_mode": "random",
+    "growths_variance": 50,
+    "growths_preserve_total": false,
+    "growths_min": 0,
+    "growths_max": 127,
+    "ranks_mode": "random",
+    "ranks_variance": 80,
+    "ranks_fix_weapon": "swap_weapon",
+    "inventory_mode": "full_random",
+    "force_build": false,
+    "auto_fix": true
+  }
+}

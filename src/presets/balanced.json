@@ -1,0 +1,30 @@
+{
+  "name": "Balanced",
+  "description": "Moderate randomization across all categories. Classes randomized, stats have medium variance, weapons adjusted to match. A solid middle ground.",
+  "version": "1.0",
+  "settings": {
+    "class_mode": "random",
+    "keep_lords": true,
+    "keep_thieves": true,
+    "keep_dancers": true,
+    "respect_gender": true,
+    "exclude_monsters": true,
+    "max_class_copies": 4,
+    "bases_mode": "random",
+    "bases_variance": 3,
+    "bases_preserve_total": false,
+    "bases_min": 0,
+    "bases_max": 30,
+    "growths_mode": "random",
+    "growths_variance": 20,
+    "growths_preserve_total": false,
+    "growths_min": 5,
+    "growths_max": 100,
+    "ranks_mode": "random",
+    "ranks_variance": 30,
+    "ranks_fix_weapon": "raise_rank",
+    "inventory_mode": "guarantee_usable",
+    "force_build": false,
+    "auto_fix": true
+  }
+}
