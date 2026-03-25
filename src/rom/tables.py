@@ -54,7 +54,13 @@ class TableEntry:
             
             # Get size for bytes type, default to entry_size if not specified
             size = field_def.get('size', entry_size - offset)
-            value = self.fields.get(name, 0)
+            
+            # CRITICAL FIX: Use original value if field wasn't modified
+            # This prevents corrupting pointers and other unmodified fields
+            if name in self.fields:
+                value = self.fields[name]
+            else:
+                value = self.original_fields.get(name, 0)
 
             if ftype == 'uint8':
                 buf[offset] = value & 0xFF
