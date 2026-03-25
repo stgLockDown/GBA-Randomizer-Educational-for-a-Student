@@ -187,15 +187,28 @@ class ValidationEngine:
 
             name = meta.get('name', f'Char_{cid}')
 
+            # CRITICAL: Check that lords have valid name pointers (story scripts depend on this)
+            if cid in lord_ids:
+                name_ptr = entry.get('name_pointer', 0)
+                if name_ptr == 0:
+                    self.issues.append(ValidationIssue(
+                        severity='error', category='required',
+                        character_id=cid, character_name=name,
+                        message='Lord character has null name pointer (will break story).',
+                        suggestion='Do not modify character table entries with null pointers.',
+                        auto_fixable=True
+                    ))
+
             # Check lords keep lord classes if setting requires
             if cid in lord_ids and self.settings.keep_lords:
                 class_id = entry.get('class_id', 0)
                 if lord_class_ids and class_id not in lord_class_ids:
                     self.issues.append(ValidationIssue(
-                        severity='warning', category='required',
+                        severity='error', category='required',  # Changed from warning to error
                         character_id=cid, character_name=name,
                         message=f'Lord character class changed to {class_id} (not a lord class).',
-                        suggestion='This may cause story script issues.',
+                        suggestion='This WILL cause story script issues. Revert to original class.',
+                        auto_fixable=True
                     ))
 
     def _check_bounds(self, char_table: ROMTable, char_meta: dict):
@@ -280,6 +293,11 @@ class ValidationEngine:
                 if orig_class is not None:
                     entry.set('class_id', orig_class)
                     issue.fixed = True
+            
+            elif issue.category == 'required' and 'null name pointer' in issue.message:
+                # Cannot auto-fix null pointers - user must rebuild with safer settings
+                # Mark as not fixable to force user attention
+                issue.auto_fixable = False
 
     def _auto_fix_weapon_rank(self, entry: TableEntry, item_table: Optional[ROMTable]):
         """Raise weapon rank to minimum needed for first weapon."""
