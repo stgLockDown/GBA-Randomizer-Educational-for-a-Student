@@ -4,28 +4,27 @@ Fire Emblem GBA Character Randomizer (FE6/FE7/FE8 + Skill System)
 import sys
 import os
 
-# Ensure src package is importable
-src_dir = os.path.dirname(os.path.abspath(__file__))
-root_dir = os.path.dirname(src_dir)
+# Get the directory containing this script (src/app.py)
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Add both root_dir and src_dir to sys.path for flexibility
-if root_dir not in sys.path:
-    sys.path.insert(0, root_dir)
-if src_dir not in sys.path:
-    sys.path.insert(0, src_dir)
+# Get the parent directory (repository root)
+parent_dir = os.path.dirname(script_dir)
+
+# Ensure script_dir (src) is in sys.path
+if script_dir not in sys.path:
+    sys.path.insert(0, script_dir)
+
+# Ensure parent_dir is also in sys.path
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
 
 from PySide6.QtWidgets import QApplication
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
 
-# Try importing with different path configurations
-try:
-    from src.ui.models.app_state import AppState
-    from src.ui.main_window import MainWindow
-except ImportError:
-    # Fallback: try importing directly if src is in path
-    from ui.models.app_state import AppState
-    from ui.main_window import MainWindow
+# Import using relative imports from src directory
+from ui.models.app_state import AppState
+from ui.main_window import MainWindow
 
 
 def main():
@@ -34,8 +33,11 @@ def main():
         Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
     )
     
-    # Disable OpenGL (Windows black screen fix)
-    QApplication.setAttribute(Qt.ApplicationAttribute.AA_DisableWindowContextHelpButton, True)
+    # Disable context help button (Windows fix) - use safe attribute access
+    try:
+        QApplication.setAttribute(Qt.ApplicationAttribute.AA_DisableWindowContextHelpButton, True)
+    except AttributeError:
+        pass  # Attribute not available in this PySide6 version
 
     app = QApplication(sys.argv)
     app.setApplicationName("FEGBA Randomizer")
