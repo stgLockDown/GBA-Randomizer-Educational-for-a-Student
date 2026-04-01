@@ -44,8 +44,14 @@ class LogsTab(QWidget):
         # Log viewer
         self.log_view = QTextEdit()
         self.log_view.setReadOnly(True)
-        self.log_view.setFont(QFont("Consolas", 10) if QFont("Consolas").exactMatch()
-                              else QFont("Courier New", 10))
+        # Set monospace font with safeguards
+        try:
+            mono_font = QFont("Consolas", 10) if QFont("Consolas", 10).exactMatch() else QFont("Courier New", 10)
+            if mono_font.pointSize() is None or mono_font.pointSize() <= 0:
+                mono_font.setPointSize(10)
+            self.log_view.setFont(mono_font)
+        except Exception:
+            pass  # Use default font if there's an issue
         self.log_view.setStyleSheet("""
             QTextEdit {
                 background: #0a0a14;

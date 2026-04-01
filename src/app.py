@@ -44,11 +44,19 @@ def main():
     app.setApplicationVersion("1.0.0")
     app.setOrganizationName("FEGBA")
 
-    # Set default font
-    font = QFont("Segoe UI", 10)
-    if not font.exactMatch():
-        font = QFont("sans-serif", 10)
-    app.setFont(font)
+    # Set default font (with safeguards for invalid point sizes)
+    try:
+        font = QFont("Segoe UI", 10)
+        if not font.exactMatch():
+            font = QFont("sans-serif", 10)
+        # Ensure point size is valid (Qt can crash with invalid sizes)
+        if font.pointSize() is None or font.pointSize() <= 0:
+            font.setPointSize(10)
+        app.setFont(font)
+    except Exception as e:
+        print(f"Warning: Could not set default font: {e}")
+        # Fall back to system default
+        pass
 
     # Create app state (loads profiles, layouts, presets)
     state = AppState()
