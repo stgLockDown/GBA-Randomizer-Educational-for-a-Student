@@ -79,15 +79,19 @@ class ClassesTab(QWidget):
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
-        scroll.setStyleSheet("QScrollArea { border: none; }")
+        scroll.setStyleSheet("""
+            QScrollArea { border: none; background: #12121f; }
+            QScrollArea > QWidget > QWidget { background: #12121f; }
+        """)
 
         self.pool_widget = QWidget()
+        self.pool_widget.setStyleSheet("background: #12121f;")
         self.pool_layout = QGridLayout(self.pool_widget)
         self.pool_layout.setSpacing(4)
 
         # Placeholder — populated when ROM is loaded
         self.pool_placeholder = QLabel("Load a ROM to see available classes.")
-        self.pool_placeholder.setStyleSheet("color: #78909c; padding: 20px;")
+        self.pool_placeholder.setStyleSheet("color: #78909c; padding: 20px; background: transparent;")
         self.pool_placeholder.setAlignment(Qt.AlignCenter)
         self.pool_layout.addWidget(self.pool_placeholder, 0, 0, 1, 4)
 
@@ -126,7 +130,7 @@ class ClassesTab(QWidget):
 
             cb = QCheckBox(f"[{class_id:3d}] {name}{gender_str}")
             cb.setChecked(True)
-            cb.setStyleSheet("font-size: 11px;")
+            cb.setStyleSheet("font-size: 11px; color: #e0e0e0; background: transparent;")
 
             row, col = divmod(i, col_count)
             self.pool_layout.addWidget(cb, row, col)

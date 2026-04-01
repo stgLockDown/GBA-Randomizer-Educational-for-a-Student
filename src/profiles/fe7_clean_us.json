@@ -5,93 +5,328 @@
   "region": "US",
   "tier": "A",
   "hashes": {
-    "sha1": ["placeholder_fe7_us_sha1"],
-    "crc32": ["placeholder_fe7_us_crc32"],
-    "note": "Replace with real SHA-1/CRC32 of clean US FE7 ROM"
+    "sha1": [
+      "350c64b0cc87f8c67d90f73e7d92eaa853da2b7f"
+    ],
+    "crc32": [
+      "2A1B5FA3"
+    ],
+    "note": "SHA-1 and CRC32 for clean US FE7 ROM (Fire Emblem: Blazing Sword)"
   },
-  "rom_size_range": [16777216, 33554432],
-
+  "rom_size_range": [
+    16777216,
+    33554432
+  ],
   "tables": {
     "characters": {
-      "address": 798684,
+      "address": 7964292,
       "pointer_address": null,
       "count": 255,
       "entry_size": 52,
       "layout": "fe7_char_vanilla"
     },
     "classes": {
-      "address": 802604,
+      "address": 8398340,
       "pointer_address": null,
       "count": 99,
       "entry_size": 84,
       "layout": "fe7_class_vanilla"
     },
     "items": {
-      "address": 807760,
+      "address": 8419168,
       "pointer_address": null,
       "count": 200,
       "entry_size": 36,
       "layout": "fe7_item_vanilla"
     }
   },
-
   "characters": {
-    "1":  {"name": "Eliwood",   "portrait": "eliwood.png",   "is_lord": true,  "is_required": true},
-    "2":  {"name": "Hector",    "portrait": "hector.png",    "is_lord": true,  "is_required": true},
-    "3":  {"name": "Lyn",       "portrait": "lyn.png",       "is_lord": true,  "is_required": true},
-    "4":  {"name": "Marcus",    "portrait": "marcus.png",    "is_lord": false, "is_required": false},
-    "5":  {"name": "Lowen",     "portrait": "lowen.png",     "is_lord": false, "is_required": false},
-    "6":  {"name": "Rebecca",   "portrait": "rebecca.png",   "is_lord": false, "is_required": false},
-    "7":  {"name": "Dorcas",    "portrait": "dorcas.png",    "is_lord": false, "is_required": false},
-    "8":  {"name": "Bartre",    "portrait": "bartre.png",    "is_lord": false, "is_required": false},
-    "9":  {"name": "Oswin",     "portrait": "oswin.png",     "is_lord": false, "is_required": false},
-    "10": {"name": "Serra",     "portrait": "serra.png",     "is_lord": false, "is_required": false},
-    "11": {"name": "Matthew",   "portrait": "matthew.png",   "is_lord": false, "is_required": false, "is_thief": true},
-    "12": {"name": "Guy",       "portrait": "guy.png",       "is_lord": false, "is_required": false},
-    "13": {"name": "Erk",       "portrait": "erk.png",       "is_lord": false, "is_required": false},
-    "14": {"name": "Priscilla", "portrait": "priscilla.png", "is_lord": false, "is_required": false},
-    "15": {"name": "Sain",      "portrait": "sain.png",      "is_lord": false, "is_required": false},
-    "16": {"name": "Kent",      "portrait": "kent.png",      "is_lord": false, "is_required": false},
-    "17": {"name": "Wil",       "portrait": "wil.png",       "is_lord": false, "is_required": false},
-    "18": {"name": "Florina",   "portrait": "florina.png",   "is_lord": false, "is_required": false},
-    "19": {"name": "Raven",     "portrait": "raven.png",     "is_lord": false, "is_required": false},
-    "20": {"name": "Lucius",    "portrait": "lucius.png",    "is_lord": false, "is_required": false},
-    "21": {"name": "Canas",     "portrait": "canas.png",     "is_lord": false, "is_required": false},
-    "22": {"name": "Dart",      "portrait": "dart.png",      "is_lord": false, "is_required": false},
-    "23": {"name": "Fiora",     "portrait": "fiora.png",     "is_lord": false, "is_required": false},
-    "24": {"name": "Legault",   "portrait": "legault.png",   "is_lord": false, "is_required": false, "is_thief": true},
-    "25": {"name": "Nino",      "portrait": "nino.png",      "is_lord": false, "is_required": false},
-    "26": {"name": "Jaffar",    "portrait": "jaffar.png",    "is_lord": false, "is_required": false},
-    "27": {"name": "Nils",      "portrait": "nils.png",      "is_lord": false, "is_required": false, "is_dancer": true},
-    "28": {"name": "Ninian",    "portrait": "ninian.png",    "is_lord": false, "is_required": false, "is_dancer": true},
-    "29": {"name": "Hawkeye",   "portrait": "hawkeye.png",   "is_lord": false, "is_required": false},
-    "30": {"name": "Pent",      "portrait": "pent.png",      "is_lord": false, "is_required": false},
-    "31": {"name": "Louise",    "portrait": "louise.png",    "is_lord": false, "is_required": false},
-    "32": {"name": "Athos",     "portrait": "athos.png",     "is_lord": false, "is_required": false},
-    "33": {"name": "Karel",     "portrait": "karel.png",     "is_lord": false, "is_required": false},
-    "34": {"name": "Harken",    "portrait": "harken.png",    "is_lord": false, "is_required": false},
-    "35": {"name": "Heath",     "portrait": "heath.png",     "is_lord": false, "is_required": false},
-    "36": {"name": "Vaida",     "portrait": "vaida.png",     "is_lord": false, "is_required": false},
-    "37": {"name": "Rath",      "portrait": "rath.png",      "is_lord": false, "is_required": false},
-    "38": {"name": "Geitz",     "portrait": "geitz.png",     "is_lord": false, "is_required": false},
-    "39": {"name": "Isadora",   "portrait": "isadora.png",   "is_lord": false, "is_required": false},
-    "40": {"name": "Karla",     "portrait": "karla.png",     "is_lord": false, "is_required": false}
+    "1": {
+      "name": "Eliwood",
+      "portrait": "eliwood.png",
+      "is_lord": true,
+      "is_required": true
+    },
+    "2": {
+      "name": "Hector",
+      "portrait": "hector.png",
+      "is_lord": true,
+      "is_required": true
+    },
+    "3": {
+      "name": "Lyn",
+      "portrait": "lyn.png",
+      "is_lord": true,
+      "is_required": true
+    },
+    "4": {
+      "name": "Marcus",
+      "portrait": "marcus.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "5": {
+      "name": "Lowen",
+      "portrait": "lowen.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "6": {
+      "name": "Rebecca",
+      "portrait": "rebecca.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "7": {
+      "name": "Dorcas",
+      "portrait": "dorcas.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "8": {
+      "name": "Bartre",
+      "portrait": "bartre.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "9": {
+      "name": "Oswin",
+      "portrait": "oswin.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "10": {
+      "name": "Serra",
+      "portrait": "serra.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "11": {
+      "name": "Matthew",
+      "portrait": "matthew.png",
+      "is_lord": false,
+      "is_required": false,
+      "is_thief": true
+    },
+    "12": {
+      "name": "Guy",
+      "portrait": "guy.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "13": {
+      "name": "Erk",
+      "portrait": "erk.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "14": {
+      "name": "Priscilla",
+      "portrait": "priscilla.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "15": {
+      "name": "Sain",
+      "portrait": "sain.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "16": {
+      "name": "Kent",
+      "portrait": "kent.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "17": {
+      "name": "Wil",
+      "portrait": "wil.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "18": {
+      "name": "Florina",
+      "portrait": "florina.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "19": {
+      "name": "Raven",
+      "portrait": "raven.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "20": {
+      "name": "Lucius",
+      "portrait": "lucius.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "21": {
+      "name": "Canas",
+      "portrait": "canas.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "22": {
+      "name": "Dart",
+      "portrait": "dart.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "23": {
+      "name": "Fiora",
+      "portrait": "fiora.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "24": {
+      "name": "Legault",
+      "portrait": "legault.png",
+      "is_lord": false,
+      "is_required": false,
+      "is_thief": true
+    },
+    "25": {
+      "name": "Nino",
+      "portrait": "nino.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "26": {
+      "name": "Jaffar",
+      "portrait": "jaffar.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "27": {
+      "name": "Nils",
+      "portrait": "nils.png",
+      "is_lord": false,
+      "is_required": false,
+      "is_dancer": true
+    },
+    "28": {
+      "name": "Ninian",
+      "portrait": "ninian.png",
+      "is_lord": false,
+      "is_required": false,
+      "is_dancer": true
+    },
+    "29": {
+      "name": "Hawkeye",
+      "portrait": "hawkeye.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "30": {
+      "name": "Pent",
+      "portrait": "pent.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "31": {
+      "name": "Louise",
+      "portrait": "louise.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "32": {
+      "name": "Athos",
+      "portrait": "athos.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "33": {
+      "name": "Karel",
+      "portrait": "karel.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "34": {
+      "name": "Harken",
+      "portrait": "harken.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "35": {
+      "name": "Heath",
+      "portrait": "heath.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "36": {
+      "name": "Vaida",
+      "portrait": "vaida.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "37": {
+      "name": "Rath",
+      "portrait": "rath.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "38": {
+      "name": "Geitz",
+      "portrait": "geitz.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "39": {
+      "name": "Isadora",
+      "portrait": "isadora.png",
+      "is_lord": false,
+      "is_required": false
+    },
+    "40": {
+      "name": "Karla",
+      "portrait": "karla.png",
+      "is_lord": false,
+      "is_required": false
+    }
   },
-
   "rules": {
-    "required_character_ids": [1, 2, 3],
-    "lord_character_ids": [1, 2, 3],
-    "thief_character_ids": [11, 24],
-    "dancer_character_ids": [27, 28],
+    "required_character_ids": [
+      1,
+      2,
+      3
+    ],
+    "lord_character_ids": [
+      1,
+      2,
+      3
+    ],
+    "thief_character_ids": [
+      11,
+      24
+    ],
+    "dancer_character_ids": [
+      27,
+      28
+    ],
     "gender_locked_classes": {
-      "female_only": [35, 36, 37, 38, 39, 40],
+      "female_only": [
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
       "male_only": []
     },
     "monster_class_ids": [],
-    "lord_class_ids": [0, 1, 2, 3, 7, 8],
+    "lord_class_ids": [
+      0,
+      1,
+      2,
+      3,
+      7,
+      8
+    ],
     "trainee_class_ids": []
   },
-
   "feature_flags": {
     "supports_class_randomization": true,
     "supports_bases_randomization": true,
