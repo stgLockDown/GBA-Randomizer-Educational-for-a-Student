@@ -19,21 +19,21 @@
   ],
   "tables": {
     "characters": {
-      "address": 7964292,
+      "address": 12443160,
       "pointer_address": null,
       "count": 255,
       "entry_size": 52,
       "layout": "fe7_char_vanilla"
     },
     "classes": {
-      "address": 8398340,
+      "address": 12451932,
       "pointer_address": null,
       "count": 99,
       "entry_size": 84,
       "layout": "fe7_class_vanilla"
     },
     "items": {
-      "address": 8419168,
+      "address": 12457516,
       "pointer_address": null,
       "count": 200,
       "entry_size": 36,

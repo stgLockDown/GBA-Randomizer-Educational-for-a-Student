@@ -19,24 +19,24 @@
   ],
   "tables": {
     "characters": {
-      "address": 6320260,
+      "address": 6320800,
       "pointer_address": null,
-      "count": 220,
+      "count": 227,
       "entry_size": 48,
       "layout": "fe6_char_vanilla"
     },
     "classes": {
-      "address": 6387552,
+      "address": 6333416,
       "pointer_address": null,
-      "count": 93,
-      "entry_size": 84,
+      "count": 75,
+      "entry_size": 72,
       "layout": "fe6_class_vanilla"
     },
     "items": {
-      "address": 6452288,
+      "address": 6338376,
       "pointer_address": null,
-      "count": 175,
-      "entry_size": 36,
+      "count": 128,
+      "entry_size": 32,
       "layout": "fe6_item_vanilla"
     }
   },
