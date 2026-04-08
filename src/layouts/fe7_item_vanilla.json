@@ -1,0 +1,48 @@
+{
+  "layout_id": "fe7_item_vanilla",
+  "description": "FE7 vanilla item table entry layout (36 bytes)",
+  "entry_size": 36,
+  "fields": [
+    {"name": "name_pointer",     "offset": 0,  "size": 4, "type": "pointer"},
+    {"name": "desc_pointer",     "offset": 4,  "size": 4, "type": "pointer"},
+    {"name": "item_id",          "offset": 8,  "size": 2, "type": "uint16"},
+    {"name": "item_type",        "offset": 10, "size": 1, "type": "uint8"},
+    {"name": "padding_1",        "offset": 11, "size": 1, "type": "uint8"},
+    {"name": "stat_bonus_ptr",   "offset": 12, "size": 4, "type": "pointer"},
+    {"name": "effectiveness_ptr","offset": 16, "size": 4, "type": "pointer"},
+    {"name": "durability",       "offset": 20, "size": 1, "type": "uint8"},
+    {"name": "might",            "offset": 21, "size": 1, "type": "uint8"},
+    {"name": "hit",              "offset": 22, "size": 1, "type": "uint8"},
+    {"name": "weight",           "offset": 23, "size": 1, "type": "uint8"},
+    {"name": "critical",         "offset": 24, "size": 1, "type": "uint8"},
+    {"name": "min_range",        "offset": 25, "size": 1, "type": "uint8"},
+    {"name": "max_range",        "offset": 26, "size": 1, "type": "uint8"},
+    {"name": "padding_2",        "offset": 27, "size": 1, "type": "uint8"},
+    {"name": "rank_required",    "offset": 28, "size": 1, "type": "uint8"},
+    {"name": "icon_id",          "offset": 29, "size": 1, "type": "uint8"},
+    {"name": "use_effect",       "offset": 30, "size": 1, "type": "uint8"},
+    {"name": "ability_flags",    "offset": 31, "size": 1, "type": "uint8"},
+    {"name": "cost",             "offset": 32, "size": 2, "type": "uint16"},
+    {"name": "padding_3",        "offset": 34, "size": 2, "type": "uint16"}
+  ],
+  "item_type_values": {
+    "0": "sword",
+    "1": "lance",
+    "2": "axe",
+    "3": "bow",
+    "4": "staff",
+    "5": "anima",
+    "6": "light",
+    "7": "dark",
+    "8": "item"
+  },
+  "rank_values": {
+    "0": "None",
+    "1": "E",
+    "31": "D",
+    "71": "C",
+    "121": "B",
+    "181": "A",
+    "251": "S"
+  }
+}

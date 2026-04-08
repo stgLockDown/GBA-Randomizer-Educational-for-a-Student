@@ -1,0 +1,30 @@
+{
+  "name": "Casual",
+  "description": "Light randomization with safety rails. Good for first-time randomizer users. Classes shuffled, stats lightly varied, all safety locks on.",
+  "version": "1.0",
+  "settings": {
+    "class_mode": "shuffle",
+    "keep_lords": true,
+    "keep_thieves": true,
+    "keep_dancers": true,
+    "respect_gender": true,
+    "exclude_monsters": true,
+    "max_class_copies": 3,
+    "bases_mode": "random",
+    "bases_variance": 2,
+    "bases_preserve_total": true,
+    "bases_min": 0,
+    "bases_max": 30,
+    "growths_mode": "random",
+    "growths_variance": 10,
+    "growths_preserve_total": true,
+    "growths_min": 5,
+    "growths_max": 90,
+    "ranks_mode": "vanilla",
+    "ranks_variance": 0,
+    "ranks_fix_weapon": "raise_rank",
+    "inventory_mode": "guarantee_usable",
+    "force_build": false,
+    "auto_fix": true
+  }
+}

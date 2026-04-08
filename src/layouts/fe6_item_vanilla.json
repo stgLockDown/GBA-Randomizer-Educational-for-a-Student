@@ -1,0 +1,23 @@
+{
+  "entry_size": 32,
+  "name": "FE6 Item Table",
+  "fields": [
+    {"name": "Name", "offset": 0, "type": "pointer"},
+    {"name": "Description", "offset": 4, "type": "pointer"},
+    {"name": "Sprite", "offset": 8, "type": "pointer"},
+    {"name": "WeaponType", "offset": 12, "type": "uint8"},
+    {"name": "Attributes", "offset": 13, "type": "uint8"},
+    {"name": "Rank", "offset": 14, "type": "uint8"},
+    {"name": "Might", "offset": 15, "type": "uint8"},
+    {"name": "Hit", "offset": 16, "type": "uint8"},
+    {"name": "Crit", "offset": 17, "type": "uint8"},
+    {"name": "Weight", "offset": 18, "type": "uint8"},
+    {"name": "Durability", "offset": 19, "type": "uint8"},
+    {"name": "Range", "offset": 20, "type": "uint8"},
+    {"name": "Cost", "offset": 21, "type": "uint16"},
+    {"name": "Icon", "offset": 23, "type": "uint8"},
+    {"name": "Effect", "offset": 24, "type": "uint8"},
+    {"name": "Unknown1", "offset": 25, "type": "uint8"},
+    {"name": "Unknown2", "offset": 26, "type": "uint8"}
+  ]
+}
