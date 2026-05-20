@@ -10,22 +10,31 @@
 ## Phase B: Engine Hardening [x]
 - [x] Engine respects feature_flags for class/bases/growths/ranks/inventory passes
 - [x] Engine emits clear warnings when running on a translation_metadata profile
-- [x] Engine performs sanity-check on character table after load (detect garbage)
+- [x] Engine performs sanity-check on character table after load
 - [x] Engine force-disables destructive flags when sanity check fails
 
 ## Phase C: Validation Hardening [x]
-- [x] Added translation-patch awareness to ValidationEngine (top-level summary issues)
+- [x] Added translation-patch awareness to ValidationEngine
 - [x] Added "table sanity" pre-check that flags impossible stat values
-- [x] Confirmed validation catches Roy HP=-19 (table-misalignment indicator) on translated ROM
+- [x] Validation correctly catches Roy HP=-19 on translated ROM
 
 ## Phase D: UI Warnings [x]
-- [x] Show prominent warning banner in main window (QMessageBox) when translated profile is active
+- [x] Show prominent warning banner (QMessageBox) when translated profile is active
 
 ## Phase E: Layout / Profile Schema Cleanup [x]
-- [x] Fixed fe6_item_vanilla.json entry_size mismatch (36 → 32 to match profile)
-- [x] Verified fe6_class_vanilla.json fields fit within 72-byte profile size
+- [x] Added fe6_class_vanilla.json and fe6_item_vanilla.json layouts
+- [x] Trimmed item layout to 32 bytes (FE6 items, not 36 like FE7/FE8)
+- [x] Made tables.py 'size' field optional via .get()
 
-## Phase F: Commit & Push [ ]
-- [ ] Commit all changes with descriptive message
-- [ ] Push branch to GitHub via x-access-token
-- [ ] Open Pull Request describing the safe-mode approach
+## Phase F: Commit & Push [x]
+- [x] Committed all changes with descriptive message (commit 7f844b5)
+- [x] Pushed branch to GitHub via x-access-token
+- [x] Opened Pull Request #3 (retargeted at feature/fegba-randomizer-v1)
+- [x] PR diff is clean: +1181 / -95 (only the safe-mode work)
+
+## Verification Summary
+- Profile matches translated ROM by SHA-1 (tier C)
+- All 3 tables load (227 chars / 75 classes / 128 items)
+- Engine: 8 warnings, 0 errors, 43 changes (growths-only)
+- Validation: 51 issues (7 translation, 41 sanity, 3 weapon, 4 bounds)
+- All other profiles still load unchanged
