@@ -1,0 +1,158 @@
+{
+  "name": "FE6 Item Table (Vanilla)",
+  "game": "FE6",
+  "description": "Standard item table layout for Fire Emblem: The Binding Blade (FE6)",
+  "entry_size": 32,
+  "fields": [
+    {
+      "name": "name_ptr",
+      "offset": 0,
+      "type": "pointer",
+      "description": "Pointer to item name text"
+    },
+    {
+      "name": "description_ptr",
+      "offset": 4,
+      "type": "pointer",
+      "description": "Pointer to item description text"
+    },
+    {
+      "name": "weapon_type",
+      "offset": 8,
+      "type": "uint8",
+      "description": "Weapon type (0: sword, 1: lance, 2: axe, 3: bow, 4: anima, 5: light, 6: dark, 7: staff, 8: other)"
+    },
+    {
+      "name": "rank",
+      "offset": 9,
+      "type": "uint8",
+      "description": "Weapon rank (0: E, 1: D, 2: C, 3: B, 4: A, 5: S)"
+    },
+    {
+      "name": "might",
+      "offset": 10,
+      "type": "uint8",
+      "description": "Weapon might"
+    },
+    {
+      "name": "weight",
+      "offset": 11,
+      "type": "uint8",
+      "description": "Item weight"
+    },
+    {
+      "name": "hit",
+      "offset": 12,
+      "type": "uint8",
+      "description": "Hit rate"
+    },
+    {
+      "name": "crit",
+      "offset": 13,
+      "type": "uint8",
+      "description": "Critical rate"
+    },
+    {
+      "name": "uses",
+      "offset": 14,
+      "type": "uint8",
+      "description": "Number of uses (0 = unbreakable)"
+    },
+    {
+      "name": "weapon_exp",
+      "offset": 15,
+      "type": "uint8",
+      "description": "Weapon experience granted on use"
+    },
+    {
+      "name": "price",
+      "offset": 16,
+      "type": "uint16",
+      "description": "Item price in gold"
+    },
+    {
+      "name": "weapon_flags_1",
+      "offset": 18,
+      "type": "uint8",
+      "description": "Weapon flags 1 (0x01: effective vs fliers, 0x02: effective vs cavalry, 0x04: effective vs armored, 0x08: effective vs monsters, 0x10: effective vs dragons, 0x20: unbreakable, 0x40: brave, 0x80: reverse weapon)"
+    },
+    {
+      "name": "weapon_flags_2",
+      "offset": 19,
+      "type": "uint8",
+      "description": "Weapon flags 2 (0x01: magic weapon, 0x02: devil weapon, 0x04: poison, 0x08: sleep, 0x10: silence, 0x20: berserk, 0x40: stone, 0x80: heal)"
+    },
+    {
+      "name": "weapon_effectiveness",
+      "offset": 20,
+      "type": "uint8",
+      "description": "Weapon effectiveness bonus (multiplier: 0x02 = 2x, 0x03 = 3x)"
+    },
+    {
+      "name": "item_id",
+      "offset": 21,
+      "type": "uint8",
+      "description": "Item ID (matches index in table)"
+    },
+    {
+      "name": "icon_index",
+      "offset": 22,
+      "type": "uint8",
+      "description": "Icon index for UI display"
+    },
+    {
+      "name": "animation_id",
+      "offset": 23,
+      "type": "uint8",
+      "description": "Battle animation ID"
+    },
+    {
+      "name": "unknown_18",
+      "offset": 24,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_19",
+      "offset": 25,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_1a",
+      "offset": 26,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_1b",
+      "offset": 27,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_1c",
+      "offset": 28,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_1d",
+      "offset": 29,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_1e",
+      "offset": 30,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_1f",
+      "offset": 31,
+      "type": "uint8",
+      "description": "Unknown byte"
+    }
+  ]
+}

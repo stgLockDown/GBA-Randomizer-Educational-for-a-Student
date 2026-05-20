@@ -22,8 +22,10 @@ class TableEntry:
         for field_def in self.layout.get('fields', []):
             name = field_def['name']
             offset = field_def['offset']
-            size = field_def['size']
             ftype = field_def['type']
+            
+            # Get size for bytes type, default to entry_size if not specified
+            size = field_def.get('size', self.layout['entry_size'] - offset)
 
             if ftype == 'uint8':
                 self.fields[name] = raw[offset]
@@ -48,9 +50,17 @@ class TableEntry:
         for field_def in self.layout.get('fields', []):
             name = field_def['name']
             offset = field_def['offset']
-            size = field_def['size']
             ftype = field_def['type']
-            value = self.fields.get(name, 0)
+            
+            # Get size for bytes type, default to entry_size if not specified
+            size = field_def.get('size', entry_size - offset)
+            
+            # CRITICAL FIX: Use original value if field wasn't modified
+            # This prevents corrupting pointers and other unmodified fields
+            if name in self.fields:
+                value = self.fields[name]
+            else:
+                value = self.original_fields.get(name, 0)
 
             if ftype == 'uint8':
                 buf[offset] = value & 0xFF

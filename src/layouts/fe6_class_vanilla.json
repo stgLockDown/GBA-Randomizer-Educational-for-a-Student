@@ -1,0 +1,296 @@
+{
+  "name": "FE6 Class Table (Vanilla)",
+  "game": "FE6",
+  "description": "Standard class table layout for Fire Emblem: The Binding Blade (FE6)",
+  "entry_size": 84,
+  "fields": [
+    {
+      "name": "name_ptr",
+      "offset": 0,
+      "type": "pointer",
+      "description": "Pointer to class name text"
+    },
+    {
+      "name": "description_ptr",
+      "offset": 4,
+      "type": "pointer",
+      "description": "Pointer to class description text"
+    },
+    {
+      "name": "base_hp",
+      "offset": 8,
+      "type": "uint8",
+      "description": "Base HP"
+    },
+    {
+      "name": "base_str",
+      "offset": 9,
+      "type": "uint8",
+      "description": "Base Strength"
+    },
+    {
+      "name": "base_skl",
+      "offset": 10,
+      "type": "uint8",
+      "description": "Base Skill"
+    },
+    {
+      "name": "base_spd",
+      "offset": 11,
+      "type": "uint8",
+      "description": "Base Speed"
+    },
+    {
+      "name": "base_def",
+      "offset": 12,
+      "type": "uint8",
+      "description": "Base Defense"
+    },
+    {
+      "name": "base_res",
+      "offset": 13,
+      "type": "uint8",
+      "description": "Base Resistance"
+    },
+    {
+      "name": "base_lck",
+      "offset": 14,
+      "type": "uint8",
+      "description": "Base Luck"
+    },
+    {
+      "name": "growth_hp",
+      "offset": 15,
+      "type": "uint8",
+      "description": "HP growth rate"
+    },
+    {
+      "name": "growth_str",
+      "offset": 16,
+      "type": "uint8",
+      "description": "Strength growth rate"
+    },
+    {
+      "name": "growth_skl",
+      "offset": 17,
+      "type": "uint8",
+      "description": "Skill growth rate"
+    },
+    {
+      "name": "growth_spd",
+      "offset": 18,
+      "type": "uint8",
+      "description": "Speed growth rate"
+    },
+    {
+      "name": "growth_def",
+      "offset": 19,
+      "type": "uint8",
+      "description": "Defense growth rate"
+    },
+    {
+      "name": "growth_res",
+      "offset": 20,
+      "type": "uint8",
+      "description": "Resistance growth rate"
+    },
+    {
+      "name": "growth_lck",
+      "offset": 21,
+      "type": "uint8",
+      "description": "Luck growth rate"
+    },
+    {
+      "name": "promotes_to_1",
+      "offset": 22,
+      "type": "uint8",
+      "description": "First promotion class ID (0 = no promotion)"
+    },
+    {
+      "name": "promotes_to_2",
+      "offset": 23,
+      "type": "uint8",
+      "description": "Second promotion class ID (0 = no promotion)"
+    },
+    {
+      "name": "promotion_level",
+      "offset": 24,
+      "type": "uint8",
+      "description": "Level required for promotion (usually 10 or 20)"
+    },
+    {
+      "name": "promotion_item",
+      "offset": 25,
+      "type": "uint8",
+      "description": "Item ID required for promotion"
+    },
+    {
+      "name": "movement",
+      "offset": 26,
+      "type": "uint8",
+      "description": "Movement points"
+    },
+    {
+      "name": "con",
+      "offset": 27,
+      "type": "uint8",
+      "description": "Constitution"
+    },
+    {
+      "name": "class_id",
+      "offset": 28,
+      "type": "uint8",
+      "description": "Class ID (matches index in table)"
+    },
+    {
+      "name": "promotion_gain_hp",
+      "offset": 29,
+      "type": "uint8",
+      "description": "HP gained on promotion"
+    },
+    {
+      "name": "promotion_gain_str",
+      "offset": 30,
+      "type": "uint8",
+      "description": "Strength gained on promotion"
+    },
+    {
+      "name": "promotion_gain_skl",
+      "offset": 31,
+      "type": "uint8",
+      "description": "Skill gained on promotion"
+    },
+    {
+      "name": "promotion_gain_spd",
+      "offset": 32,
+      "type": "uint8",
+      "description": "Speed gained on promotion"
+    },
+    {
+      "name": "promotion_gain_def",
+      "offset": 33,
+      "type": "uint8",
+      "description": "Defense gained on promotion"
+    },
+    {
+      "name": "promotion_gain_res",
+      "offset": 34,
+      "type": "uint8",
+      "description": "Resistance gained on promotion"
+    },
+    {
+      "name": "promotion_gain_lck",
+      "offset": 35,
+      "type": "uint8",
+      "description": "Luck gained on promotion"
+    },
+    {
+      "name": "weapon_ranks_sword",
+      "offset": 36,
+      "type": "uint8",
+      "description": "Sword weapon rank"
+    },
+    {
+      "name": "weapon_ranks_lance",
+      "offset": 37,
+      "type": "uint8",
+      "description": "Lance weapon rank"
+    },
+    {
+      "name": "weapon_ranks_axe",
+      "offset": 38,
+      "type": "uint8",
+      "description": "Axe weapon rank"
+    },
+    {
+      "name": "weapon_ranks_bow",
+      "offset": 39,
+      "type": "uint8",
+      "description": "Bow weapon rank"
+    },
+    {
+      "name": "weapon_ranks_anima",
+      "offset": 40,
+      "type": "uint8",
+      "description": "Anima magic weapon rank"
+    },
+    {
+      "name": "weapon_ranks_light",
+      "offset": 41,
+      "type": "uint8",
+      "description": "Light magic weapon rank"
+    },
+    {
+      "name": "weapon_ranks_dark",
+      "offset": 42,
+      "type": "uint8",
+      "description": "Dark magic weapon rank"
+    },
+    {
+      "name": "weapon_ranks_staff",
+      "offset": 43,
+      "type": "uint8",
+      "description": "Staff weapon rank"
+    },
+    {
+      "name": "terrain_bonus_mounted",
+      "offset": 44,
+      "type": "uint8",
+      "description": "Mounted terrain bonus flags"
+    },
+    {
+      "name": "terrain_bonus_flying",
+      "offset": 45,
+      "type": "uint8",
+      "description": "Flying terrain bonus flags"
+    },
+    {
+      "name": "terrain_bonus_armored",
+      "offset": 46,
+      "type": "uint8",
+      "description": "Armored terrain bonus flags"
+    },
+    {
+      "name": "class_flags",
+      "offset": 47,
+      "type": "uint8",
+      "description": "Class flags (0x01: female, 0x02: mounted, 0x04: flying, 0x08: armored, 0x10: promoted, 0x20: thief, 0x40: lord, 0x80: dragon)"
+    },
+    {
+      "name": "unknown_48",
+      "offset": 48,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_49",
+      "offset": 49,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_4a",
+      "offset": 50,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_4b",
+      "offset": 51,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_4c",
+      "offset": 52,
+      "type": "uint8",
+      "description": "Unknown byte"
+    },
+    {
+      "name": "unknown_4d",
+      "offset": 53,
+      "type": "uint8",
+      "description": "Unknown byte"
+    }
+  ]
+}

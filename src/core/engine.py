@@ -150,10 +150,41 @@ class RandomizationEngine:
             self.errors.append("Character table not loaded.")
             return False
 
+        # ---- Translation-patch awareness ----
+        # If the profile is marked as a translation patch, emit warnings up front.
+        translation_meta = self.profile.get('translation_metadata', {}) or {}
+        if translation_meta.get('is_translation_patch'):
+            self.warnings.append(
+                "TRANSLATION PATCH DETECTED: data tables may be relocated; "
+                "running in safe-mode (only operations explicitly enabled by the "
+                "profile's feature_flags will run)."
+            )
+            for w in (self.profile.get('warnings') or []):
+                self.warnings.append(w)
+
+        # ---- Pre-flight character table sanity check ----
+        # Detect garbage table data (translated ROMs whose tables have moved).
+        sanity_ok, sanity_msg = self._sanity_check_character_table(char_table)
+        if not sanity_ok:
+            self.warnings.append(
+                f"CHARACTER TABLE SANITY CHECK FAILED: {sanity_msg} "
+                "Destructive randomization passes will be skipped to protect the ROM."
+            )
+
         # Build character metadata from profile
         char_meta = self.profile.get('characters', {})
         rules = self.profile.get('rules', {})
-        features = self.profile.get('feature_flags', {})
+        features = dict(self.profile.get('feature_flags', {}))
+
+        # If sanity check failed, force-disable destructive feature flags.
+        if not sanity_ok:
+            for unsafe_flag in (
+                'supports_class_randomization',
+                'supports_bases_randomization',
+                'supports_ranks_randomization',
+                'supports_inventory_randomization',
+            ):
+                features[unsafe_flag] = False
 
         # Filter to valid/playable characters
         playable_indices = self._get_playable_indices(char_table, char_meta)
@@ -210,6 +241,67 @@ class RandomizationEngine:
                 change.new_items = entry.get_stat_values('items')
 
         return len(self.errors) == 0
+
+    def _sanity_check_character_table(self, char_table: ROMTable) -> Tuple[bool, str]:
+        """
+        Heuristic check that the character table actually contains plausible
+        FE GBA character data. On translated ROMs, the table addresses listed
+        in the profile may point at unrelated bytes, producing absurd values.
+
+        Returns (ok, message). ``ok=False`` means the table looks corrupt
+        and destructive randomization passes should be skipped.
+        """
+        char_meta = self.profile.get('characters', {})
+        if not char_meta:
+            return True, "No character metadata to compare against."
+
+        suspicious = 0
+        checked = 0
+
+        for entry in char_table.entries[:64]:
+            cid = entry.get('char_id', entry.index)
+            meta = char_meta.get(str(cid)) or char_meta.get(str(entry.index))
+            if not meta:
+                continue
+            checked += 1
+
+            # 1. char_id should fit in a single byte
+            try:
+                raw_cid = entry.get('char_id', 0)
+                if raw_cid < 0 or raw_cid > 0xFF:
+                    suspicious += 1
+                    continue
+            except Exception:
+                suspicious += 1
+                continue
+
+            # 2. base HP should be a small positive number
+            bases = entry.get_stat_values('bases') or {}
+            hp = bases.get('hp', bases.get('base_hp', None))
+            if hp is not None:
+                if hp <= 0 or hp > 80:
+                    suspicious += 1
+                    continue
+
+            # 3. Growths should each be in [0, 200]
+            growths = entry.get_stat_values('growths') or {}
+            bad_growth = any((g < 0 or g > 200) for g in growths.values())
+            if bad_growth:
+                suspicious += 1
+                continue
+
+        if checked == 0:
+            return True, "No metadata-mapped entries to verify."
+
+        ratio = suspicious / max(1, checked)
+        if ratio >= 0.5:
+            return False, (
+                f"{suspicious}/{checked} sampled characters had implausible "
+                f"values (HP out of range, growths outside [0,200], or invalid "
+                f"char_id). The table addresses in the profile probably do not "
+                f"point at real character data on this ROM."
+            )
+        return True, f"Sanity check passed ({checked - suspicious}/{checked} ok)."
 
     def _get_playable_indices(self, char_table: ROMTable, char_meta: dict) -> List[int]:
         """Determine which table entries are playable characters."""
