@@ -48,12 +48,28 @@ A polished Windows-only GUI randomizer for **Fire Emblem 6**, **Fire Emblem 7**,
 
 ## 🚀 Quick Start
 
-### Running from Source
+### Direct Launch (Recommended)
+
+**Windows:** double-click:
+
+```text
+Launch Randomizer.bat
+```
+
+The launcher keeps the working directory in the project folder, checks for Python, and starts the GUI through `launch.py`. If dependencies are missing, it will show the install command.
+
+**Any platform with Python:**
+
+```bash
+python launch.py
+```
+
+### Running from Source Manually
 ```bash
 # Install dependencies
-pip install PySide6 Pillow
+pip install -r requirements.txt
 
-# Run the application
+# Run the application directly
 python src/app.py
 ```
 
