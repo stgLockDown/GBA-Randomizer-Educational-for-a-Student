@@ -186,6 +186,20 @@ class RandomizationEngine:
             ):
                 features[unsafe_flag] = False
 
+            # Even growths can't be safely written if the character table is
+            # corrupt -- the addresses being written would land on unrelated
+            # bytes. Refuse to randomize anything unless the user explicitly
+            # opts in via force_build. The build pipeline checks
+            # ``len(engine.errors) == 0`` and will abort cleanly.
+            if not getattr(self.settings, 'force_build', False):
+                features['supports_growths_randomization'] = False
+                self.errors.append(
+                    "Refusing to randomize: the character table on this ROM "
+                    "looks corrupt (wrong addresses for this build). No bytes "
+                    "have been written. Use the original Japanese FE6 ROM, or "
+                    "enable Advanced -> Force Build to override at your own risk."
+                )
+
         # Filter to valid/playable characters
         playable_indices = self._get_playable_indices(char_table, char_meta)
 
