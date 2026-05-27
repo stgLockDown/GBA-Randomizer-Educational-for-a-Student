@@ -166,6 +166,7 @@ class ProfileManager:
             'BE7J': ('fe7', 'JP'),
             'BE7P': ('fe7', 'EU'),
             'AFEJ': ('fe6', 'JP'),
+            'AFE4': ('fe6', 'Translated'),  # Common game code for translated FE6 ROMs
         }
         code = rom.gba_game_code
         if code in game_code_map:

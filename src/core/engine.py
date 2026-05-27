@@ -151,7 +151,8 @@ class RandomizationEngine:
             return False
 
         # ---- Translation-patch awareness ----
-        # If the profile is marked as a translation patch, emit warnings up front.
+        # If the profile is marked as a translation patch, emit warnings up front
+        # and apply the safety guard that forcibly disables unsafe operations.
         translation_meta = self.profile.get('translation_metadata', {}) or {}
         if translation_meta.get('is_translation_patch'):
             self.warnings.append(
@@ -162,6 +163,17 @@ class RandomizationEngine:
             for w in (self.profile.get('warnings') or []):
                 self.warnings.append(w)
 
+        # Build character metadata from profile
+        char_meta = self.profile.get('characters', {})
+        rules = self.profile.get('rules', {})
+        features = dict(self.profile.get('feature_flags', {}))
+
+        # Apply translation safety guard: forcibly disable unsafe operations
+        # listed in the profile's known_unsafe_operations, even if a user
+        # manually re-enables them in the UI.
+        if translation_meta.get('is_translation_patch'):
+            self._apply_translation_safety_guard(features, translation_meta)
+
         # ---- Pre-flight character table sanity check ----
         # Detect garbage table data (translated ROMs whose tables have moved).
         sanity_ok, sanity_msg = self._sanity_check_character_table(char_table)
@@ -171,13 +183,7 @@ class RandomizationEngine:
                 "Destructive randomization passes will be skipped to protect the ROM."
             )
 
-        # Build character metadata from profile
-        char_meta = self.profile.get('characters', {})
-        rules = self.profile.get('rules', {})
-        features = dict(self.profile.get('feature_flags', {}))
-
-        # If sanity check failed, force-disable destructive feature flags.
-        if not sanity_ok:
+            # If sanity check failed, force-disable destructive feature flags.
             for unsafe_flag in (
                 'supports_class_randomization',
                 'supports_bases_randomization',
@@ -186,6 +192,12 @@ class RandomizationEngine:
             ):
                 features[unsafe_flag] = False
 
+            # Force vanilla settings for all disabled features
+            self.settings.class_mode = "vanilla"
+            self.settings.bases_mode = "vanilla"
+            self.settings.ranks_mode = "vanilla"
+            self.settings.inventory_mode = "dont_change"
+
             # Even growths can't be safely written if the character table is
             # corrupt -- the addresses being written would land on unrelated
             # bytes. Refuse to randomize anything unless the user explicitly
@@ -193,6 +205,7 @@ class RandomizationEngine:
             # ``len(engine.errors) == 0`` and will abort cleanly.
             if not getattr(self.settings, 'force_build', False):
                 features['supports_growths_randomization'] = False
+                self.settings.growths_mode = "vanilla"
                 self.errors.append(
                     "Refusing to randomize: the character table on this ROM "
                     "looks corrupt (wrong addresses for this build). No bytes "
@@ -334,6 +347,46 @@ class RandomizationEngine:
     def _is_field_locked(self, char_id: int, field_name: str) -> bool:
         locks = self.settings.character_locks.get(char_id, {})
         return locks.get(field_name, False)
+
+    def _apply_translation_safety_guard(self, features: dict, translation_meta: dict) -> None:
+        """Enforce safety constraints for translation-patched ROMs.
+
+        If the profile indicates this is a translation patch, forcibly disable
+        any randomization features listed in known_unsafe_operations. This
+        prevents data corruption even if a user manually enables those features
+        in the UI.
+        """
+        unsafe_ops = translation_meta.get('known_unsafe_operations', [])
+        feature_map = {
+            'class_randomization': 'supports_class_randomization',
+            'bases_randomization': 'supports_bases_randomization',
+            'ranks_randomization': 'supports_ranks_randomization',
+            'inventory_randomization': 'supports_inventory_randomization',
+            'recruitment_shuffle': 'supports_recruitment_shuffle',
+            'skill_tables': 'supports_skill_tables',
+            'cosmetic_randomization': 'supports_cosmetic_randomization',
+        }
+
+        for op in unsafe_ops:
+            flag_key = feature_map.get(op)
+            if flag_key and features.get(flag_key, True):
+                features[flag_key] = False
+                self.warnings.append(
+                    f"Translation safety: forcibly disabled '{op}' — "
+                    f"this operation is unsafe for the detected translation patch."
+                )
+
+        # Also force vanilla mode for any disabled features in settings
+        if not features.get('supports_class_randomization', True):
+            self.settings.class_mode = "vanilla"
+        if not features.get('supports_bases_randomization', True):
+            self.settings.bases_mode = "vanilla"
+        if not features.get('supports_growths_randomization', True):
+            self.settings.growths_mode = "vanilla"
+        if not features.get('supports_ranks_randomization', True):
+            self.settings.ranks_mode = "vanilla"
+        if not features.get('supports_inventory_randomization', True):
+            self.settings.inventory_mode = "dont_change"
 
     def _find_entry_index(self, table: ROMTable, char_id: int, indices: List[int]) -> Optional[int]:
         for idx in indices:

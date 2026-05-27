@@ -77,6 +77,9 @@ class ValidationEngine:
                     message=w,
                 ))
 
+        # Translation-patch-specific safety checks
+        self._check_translation_patch_safety(char_table, char_meta)
+
         # Pre-check: detect impossible stats (table-misalignment indicator)
         self._check_table_sanity(char_table, char_meta)
 
@@ -90,6 +93,59 @@ class ValidationEngine:
             self._auto_fix_issues(char_table, class_table, item_table, rules)
 
         return self.issues
+
+    def _check_translation_patch_safety(self, char_table: ROMTable, char_meta: dict):
+        """Add validation warnings for translation-patched ROMs.
+
+        Detects when a profile indicates a translation patch and checks that
+        only safe operations are enabled. Also validates that table data
+        appears reasonable (not obviously garbage).
+        """
+        translation_meta = self.profile.get('translation_metadata', {})
+        if not translation_meta.get('is_translation_patch', False):
+            return
+
+        # Check that unsafe operations are actually disabled
+        features = self.profile.get('feature_flags', {})
+        unsafe_ops = translation_meta.get('known_unsafe_operations', [])
+        feature_map = {
+            'class_randomization': 'supports_class_randomization',
+            'bases_randomization': 'supports_bases_randomization',
+            'ranks_randomization': 'supports_ranks_randomization',
+            'inventory_randomization': 'supports_inventory_randomization',
+            'recruitment_shuffle': 'supports_recruitment_shuffle',
+        }
+
+        for op in unsafe_ops:
+            flag_key = feature_map.get(op)
+            if flag_key and features.get(flag_key, False):
+                self.issues.append(ValidationIssue(
+                    severity='error', category='translation',
+                    character_id=0, character_name='ROM',
+                    message=f'Unsafe operation "{op}" is enabled for a translation-patched ROM. '
+                            f'This will likely corrupt the ROM.',
+                    suggestion=f'Disable {flag_key} in the profile or use story_safe preset.',
+                ))
+
+        # Validate table data integrity — check first few entries for obviously garbage values
+        garbage_count = 0
+        for i, entry in enumerate(char_table):
+            if i >= 10:
+                break
+            cid = entry.get('char_id', entry.index)
+            class_id = entry.get('class_id', 0)
+            if cid > 500 or class_id > 200:
+                garbage_count += 1
+
+        if garbage_count >= 3:
+            self.issues.append(ValidationIssue(
+                severity='warning', category='translation',
+                character_id=0, character_name='ROM',
+                message='Character table data appears corrupt or misaligned. '
+                        f'{garbage_count}/10 first entries have invalid IDs. '
+                        'The table address may not match the translated ROM.',
+                suggestion='Only use growths randomization (safe mode) or verify table addresses.',
+            ))
 
     def _check_table_sanity(self, char_table: ROMTable, char_meta: dict):
         """Flag impossible values that suggest the character table is misaligned."""

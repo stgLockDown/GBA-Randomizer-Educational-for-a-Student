@@ -9,9 +9,10 @@
       "32605fd456677ef740f8d521e9a3894ace4bc59c"
     ],
     "crc32": [
-      "99B8B6D7"
+      "99B8B6D7",
+      "FF48A3C7"
     ],
-    "note": "SHA-1 and CRC32 for the English translation patch of FE6 (Fire Emblem: The Binding Blade). The translation patch restructures internal data tables, so destructive randomization operations are DISABLED for safety."
+    "note": "SHA-1 and CRC32 for the English translation patch of FE6 (Fire Emblem: The Binding Blade). The translation patch restructures internal data tables, so destructive randomization operations are DISABLED for safety. Multiple CRC32 values are listed to account for header variants."
   },
   "rom_size_range": [
     16777216,
@@ -24,13 +25,13 @@
       "count": 227,
       "entry_size": 48,
       "layout": "fe6_char_vanilla",
-      "note": "INHERITED FROM JP PROFILE - data may be unreliable on translated ROM"
+      "note": "INHERITED FROM JP PROFILE - data may be unreliable on translated ROM. The translation patch restructures tables; only growths randomization is considered safe."
     },
     "classes": {
       "address": 6333416,
       "pointer_address": null,
       "count": 75,
-      "entry_size": 72,
+      "entry_size": 84,
       "layout": "fe6_class_vanilla",
       "note": "INHERITED FROM JP PROFILE - data may be unreliable on translated ROM"
     },
@@ -38,7 +39,7 @@
       "address": 6338376,
       "pointer_address": null,
       "count": 128,
-      "entry_size": 32,
+      "entry_size": 36,
       "layout": "fe6_item_vanilla",
       "note": "INHERITED FROM JP PROFILE - data may be unreliable on translated ROM"
     }
@@ -47,7 +48,7 @@
     "is_translation_patch": true,
     "data_tables_relocated": true,
     "safe_mode": true,
-    "known_safe_operations": [],
+    "known_safe_operations": ["growths_randomization"],
     "known_unsafe_operations": [
       "class_randomization",
       "bases_randomization",
@@ -56,7 +57,8 @@
     ],
     "experimental_operations": [
       "growths_randomization"
-    ]
+    ],
+    "crash_history": "Original randomization with JP profile caused 'jumped to invalid address 01110000' crash due to table address mismatch"
   },
   "characters": {
     "1": {"name": "Roy", "portrait": "roy.png", "is_lord": true, "is_required": true},
