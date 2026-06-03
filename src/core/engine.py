@@ -200,18 +200,58 @@ class RandomizationEngine:
 
             # Even growths can't be safely written if the character table is
             # corrupt -- the addresses being written would land on unrelated
-            # bytes. Refuse to randomize anything unless the user explicitly
-            # opts in via force_build. The build pipeline checks
-            # ``len(engine.errors) == 0`` and will abort cleanly.
+            # bytes. Refuse to randomize growths unless the user explicitly
+            # opts in via force_build, and emit a build-blocking error ONLY
+            # if the user is actually trying to randomize something. This
+            # lets users still build a vanilla copy of an unsupported ROM
+            # for preview / validation purposes without surfacing a
+            # confusing "build error" when nothing was being changed.
             if not getattr(self.settings, 'force_build', False):
                 features['supports_growths_randomization'] = False
-                self.settings.growths_mode = "vanilla"
-                self.errors.append(
-                    "Refusing to randomize: the character table on this ROM "
-                    "looks corrupt (wrong addresses for this build). No bytes "
-                    "have been written. Use the original Japanese FE6 ROM, or "
-                    "enable Advanced -> Force Build to override at your own risk."
+
+                user_requested_randomization = (
+                    self.settings.growths_mode != "vanilla"
+                    or self.settings.class_mode != "vanilla"
+                    or self.settings.bases_mode != "vanilla"
+                    or self.settings.ranks_mode != "vanilla"
+                    or self.settings.inventory_mode != "dont_change"
                 )
+
+                self.settings.growths_mode = "vanilla"
+
+                if user_requested_randomization:
+                    # Provide a profile-aware error: if this is a known
+                    # translation patch, name it; otherwise the generic
+                    # "looks corrupt" wording applies.
+                    translation_name = (
+                        translation_meta.get('translation_name')
+                        if translation_meta.get('is_translation_patch')
+                        else None
+                    )
+                    if translation_name:
+                        self.errors.append(
+                            f"Refusing to randomize: this ROM has been identified "
+                            f"as the '{translation_name}' translation patch, which "
+                            f"relocates the internal data tables. No bytes have "
+                            f"been written. Use the original Japanese FE6 ROM "
+                            f"(no translation applied) for full randomization, "
+                            f"then re-apply the translation on top, or enable "
+                            f"Advanced -> Force Build to override at your own risk."
+                        )
+                    else:
+                        self.errors.append(
+                            "Refusing to randomize: the character table on this "
+                            "ROM looks corrupt (wrong addresses for this build). "
+                            "No bytes have been written. Use the original "
+                            "Japanese FE6 ROM, or enable Advanced -> Force Build "
+                            "to override at your own risk."
+                        )
+                else:
+                    self.warnings.append(
+                        "All randomization modes are set to vanilla — building "
+                        "an unmodified copy of the ROM. No data was randomized "
+                        "because the character table sanity check failed."
+                    )
 
         # Filter to valid/playable characters
         playable_indices = self._get_playable_indices(char_table, char_meta)
