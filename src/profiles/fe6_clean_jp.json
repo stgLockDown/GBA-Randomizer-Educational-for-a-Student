@@ -19,24 +19,24 @@
   ],
   "tables": {
     "characters": {
-      "address": 607084,
+      "address": 6321872,
       "pointer_address": null,
-      "count": 220,
+      "count": 226,
       "entry_size": 48,
       "layout": "fe6_char_vanilla"
     },
     "classes": {
-      "address": 617760,
+      "address": 6332720,
       "pointer_address": null,
-      "count": 93,
-      "entry_size": 84,
+      "count": 74,
+      "entry_size": 72,
       "layout": "fe6_class_vanilla"
     },
     "items": {
-      "address": 627440,
+      "address": 6338120,
       "pointer_address": null,
-      "count": 175,
-      "entry_size": 36,
+      "count": 128,
+      "entry_size": 32,
       "layout": "fe6_item_vanilla"
     }
   },
@@ -342,7 +342,7 @@
     "supports_bases_randomization": true,
     "supports_growths_randomization": true,
     "supports_ranks_randomization": true,
-    "supports_inventory_randomization": true,
+    "supports_inventory_randomization": false,
     "supports_recruitment_shuffle": false,
     "supports_skill_tables": false,
     "supports_cosmetic_randomization": false
@@ -352,6 +352,11 @@
       "symptom": "Sanity check fails: 43/43 character entries look implausible.",
       "root_cause": "The character/class/item table base addresses in this profile have not been validated against a real JP FE6 ROM (they were placeholders).",
       "workaround": "Use Advanced -> Force Build to override the sanity check and randomize anyway, OR open an issue so the addresses can be corrected."
+    },
+    {
+      "symptom": "Sanity check fails: 43/43 character entries look implausible.",
+      "root_cause": "Profile table addresses were placeholders pointing into ARM/Thumb code rather than the real PInfo/JInfo/IInfo tables.",
+      "fixed_in": "Verified addresses extracted from the StanHash/fe6 decomp (which matches this exact ROM by SHA-1) and validated by decoding Roy/Lord/Iron-Sword entries against canonical FE6 stats."
     }
   ]
 }

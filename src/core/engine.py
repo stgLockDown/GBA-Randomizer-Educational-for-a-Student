@@ -342,11 +342,14 @@ class RandomizationEngine:
                 suspicious += 1
                 continue
 
-            # 2. base HP should be a small positive number
+            # 2. base HP should be a small number. In FE6, character "bases"
+            # are deltas added to the class base, so 0 or even slightly
+            # negative values are normal. Anything outside [-30, 80] is
+            # almost certainly garbage from a mis-aimed table address.
             bases = entry.get_stat_values('bases') or {}
             hp = bases.get('hp', bases.get('base_hp', None))
             if hp is not None:
-                if hp <= 0 or hp > 80:
+                if hp < -30 or hp > 80:
                     suspicious += 1
                     continue
 
