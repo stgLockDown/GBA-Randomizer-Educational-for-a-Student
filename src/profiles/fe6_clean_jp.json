@@ -320,14 +320,7 @@
       29
     ],
     "gender_locked_classes": {
-      "female_only": [
-        35,
-        36,
-        37,
-        38,
-        39,
-        40
-      ],
+      "female_only": [],
       "male_only": []
     },
     "monster_class_ids": [],
@@ -357,6 +350,11 @@
       "symptom": "Sanity check fails: 43/43 character entries look implausible.",
       "root_cause": "Profile table addresses were placeholders pointing into ARM/Thumb code rather than the real PInfo/JInfo/IInfo tables.",
       "fixed_in": "Verified addresses extracted from the StanHash/fe6 decomp (which matches this exact ROM by SHA-1) and validated by decoding Roy/Lord/Iron-Sword entries against canonical FE6 stats."
+    },
+    {
+      "symptom": "Validation falsely auto-fixes Marcus/Lance/Wolt/Bors/Merlinus as male characters assigned female-only classes.",
+      "root_cause": "gender_locked_classes.female_only was inherited from a non-FE6 template; class IDs 35-40 are normal FE6 JP classes used by male vanilla characters.",
+      "fixed_in": "Cleared FE6 JP gender_locked_classes until class-gender metadata can be rebuilt from authoritative FE6 class data."
     }
   ]
 }

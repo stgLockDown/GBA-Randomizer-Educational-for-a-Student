@@ -162,12 +162,15 @@ class ValidationEngine:
 
             bases = entry.get_stat_values('bases') or {}
             hp = bases.get('hp', bases.get('base_hp'))
-            if hp is not None and (hp <= 0 or hp > 80):
+            # FE6 character bases are deltas added to class bases, so 0 or
+            # mildly negative values can be valid. Very large or deeply
+            # negative values still indicate a likely misaligned table.
+            if hp is not None and (hp < -30 or hp > 80):
                 suspicious_entries += 1
                 self.issues.append(ValidationIssue(
                     severity='warning', category='sanity',
                     character_id=cid, character_name=name,
-                    message=f'Implausible HP base value {hp} (expected 1-80).',
+                    message=f'Implausible HP base value {hp} (expected -30 to 80).',
                     suggestion='Profile table addresses may be wrong for this ROM.',
                 ))
                 continue
@@ -322,15 +325,23 @@ class ValidationEngine:
 
             name = meta.get('name', f'Char_{cid}')
 
-            # CRITICAL: Check that lords have valid name pointers (story scripts depend on this)
+            # CRITICAL: Check that lords have valid name identifiers (story
+            # scripts depend on this). FE7/FE8-style layouts use 32-bit
+            # name_pointer fields; FE6 JP uses 16-bit msg_name text IDs.
             if cid in lord_ids:
-                name_ptr = entry.get('name_pointer', 0)
-                if name_ptr == 0:
+                if 'name_pointer' in entry.fields:
+                    name_identifier = entry.get('name_pointer', 0)
+                    name_label = 'name pointer'
+                else:
+                    name_identifier = entry.get('msg_name', 0)
+                    name_label = 'name message ID'
+
+                if name_identifier == 0:
                     self.issues.append(ValidationIssue(
                         severity='error', category='required',
                         character_id=cid, character_name=name,
-                        message='Lord character has null name pointer (will break story).',
-                        suggestion='Do not modify character table entries with null pointers.',
+                        message=f'Lord character has null {name_label} (will break story).',
+                        suggestion='Do not modify required character table text identifiers.',
                         auto_fixable=True
                     ))
 
