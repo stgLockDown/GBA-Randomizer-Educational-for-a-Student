@@ -54,6 +54,35 @@ class ValidationEngine:
         char_meta = self.profile.get('characters', {})
         rules = self.profile.get('rules', {})
 
+        # Translation-patch awareness
+        translation_meta = self.profile.get('translation_metadata') or {}
+        if translation_meta.get('is_translation_patch'):
+            self.issues.append(ValidationIssue(
+                severity='warning', category='translation',
+                character_id=0, character_name='ROM',
+                message=(
+                    "This ROM is an English translation patch. "
+                    "Internal data tables may be relocated; running in safe-mode."
+                ),
+                suggestion=(
+                    "Only operations enabled by the profile's feature_flags "
+                    "will be applied. Use the original Japanese ROM for full "
+                    "randomization."
+                ),
+            ))
+            for w in (self.profile.get('warnings') or []):
+                self.issues.append(ValidationIssue(
+                    severity='warning', category='translation',
+                    character_id=0, character_name='ROM',
+                    message=w,
+                ))
+
+        # Translation-patch-specific safety checks
+        self._check_translation_patch_safety(char_table, char_meta)
+
+        # Pre-check: detect impossible stats (table-misalignment indicator)
+        self._check_table_sanity(char_table, char_meta)
+
         self._check_class_legality(char_table, class_table, char_meta, rules)
         self._check_weapon_usability(char_table, item_table, char_meta)
         self._check_required_characters(char_table, char_meta, rules)
@@ -64,6 +93,115 @@ class ValidationEngine:
             self._auto_fix_issues(char_table, class_table, item_table, rules)
 
         return self.issues
+
+    def _check_translation_patch_safety(self, char_table: ROMTable, char_meta: dict):
+        """Add validation warnings for translation-patched ROMs.
+
+        Detects when a profile indicates a translation patch and checks that
+        only safe operations are enabled. Also validates that table data
+        appears reasonable (not obviously garbage).
+        """
+        translation_meta = self.profile.get('translation_metadata', {})
+        if not translation_meta.get('is_translation_patch', False):
+            return
+
+        # Check that unsafe operations are actually disabled
+        features = self.profile.get('feature_flags', {})
+        unsafe_ops = translation_meta.get('known_unsafe_operations', [])
+        feature_map = {
+            'class_randomization': 'supports_class_randomization',
+            'bases_randomization': 'supports_bases_randomization',
+            'ranks_randomization': 'supports_ranks_randomization',
+            'inventory_randomization': 'supports_inventory_randomization',
+            'recruitment_shuffle': 'supports_recruitment_shuffle',
+        }
+
+        for op in unsafe_ops:
+            flag_key = feature_map.get(op)
+            if flag_key and features.get(flag_key, False):
+                self.issues.append(ValidationIssue(
+                    severity='error', category='translation',
+                    character_id=0, character_name='ROM',
+                    message=f'Unsafe operation "{op}" is enabled for a translation-patched ROM. '
+                            f'This will likely corrupt the ROM.',
+                    suggestion=f'Disable {flag_key} in the profile or use story_safe preset.',
+                ))
+
+        # Validate table data integrity — check first few entries for obviously garbage values
+        garbage_count = 0
+        for i, entry in enumerate(char_table):
+            if i >= 10:
+                break
+            cid = entry.get('char_id', entry.index)
+            class_id = entry.get('class_id', 0)
+            if cid > 500 or class_id > 200:
+                garbage_count += 1
+
+        if garbage_count >= 3:
+            self.issues.append(ValidationIssue(
+                severity='warning', category='translation',
+                character_id=0, character_name='ROM',
+                message='Character table data appears corrupt or misaligned. '
+                        f'{garbage_count}/10 first entries have invalid IDs. '
+                        'The table address may not match the translated ROM.',
+                suggestion='Only use growths randomization (safe mode) or verify table addresses.',
+            ))
+
+    def _check_table_sanity(self, char_table: ROMTable, char_meta: dict):
+        """Flag impossible values that suggest the character table is misaligned."""
+        suspicious_entries = 0
+        sampled = 0
+
+        for entry in char_table.entries[:64]:
+            cid = entry.get('char_id', entry.index)
+            meta = char_meta.get(str(cid)) or char_meta.get(str(entry.index))
+            if not meta:
+                continue
+            sampled += 1
+            name = meta.get('name', f'Char_{cid}')
+
+            bases = entry.get_stat_values('bases') or {}
+            hp = bases.get('hp', bases.get('base_hp'))
+            # FE6 character bases are deltas added to class bases, so 0 or
+            # mildly negative values can be valid. Very large or deeply
+            # negative values still indicate a likely misaligned table.
+            if hp is not None and (hp < -30 or hp > 80):
+                suspicious_entries += 1
+                self.issues.append(ValidationIssue(
+                    severity='warning', category='sanity',
+                    character_id=cid, character_name=name,
+                    message=f'Implausible HP base value {hp} (expected -30 to 80).',
+                    suggestion='Profile table addresses may be wrong for this ROM.',
+                ))
+                continue
+
+            growths = entry.get_stat_values('growths') or {}
+            for fname, gval in growths.items():
+                if gval < 0 or gval > 200:
+                    suspicious_entries += 1
+                    self.issues.append(ValidationIssue(
+                        severity='warning', category='sanity',
+                        character_id=cid, character_name=name,
+                        message=f'Implausible growth {fname}={gval} (expected 0-200).',
+                        suggestion='Profile table addresses may be wrong for this ROM.',
+                    ))
+                    break
+
+        if sampled and (suspicious_entries / sampled) >= 0.5:
+            self.issues.append(ValidationIssue(
+                severity='error', category='sanity',
+                character_id=0, character_name='ROM',
+                message=(
+                    f'Character table looks corrupt: '
+                    f'{suspicious_entries}/{sampled} sampled entries had '
+                    f'implausible values.'
+                ),
+                suggestion=(
+                    'The profile table addresses likely do not point at real '
+                    'character data on this ROM. Destructive randomization '
+                    'passes have been skipped.'
+                ),
+            ))
 
     def _check_class_legality(self, char_table: ROMTable, class_table: Optional[ROMTable],
                               char_meta: dict, rules: dict):
@@ -187,15 +325,36 @@ class ValidationEngine:
 
             name = meta.get('name', f'Char_{cid}')
 
+            # CRITICAL: Check that lords have valid name identifiers (story
+            # scripts depend on this). FE7/FE8-style layouts use 32-bit
+            # name_pointer fields; FE6 JP uses 16-bit msg_name text IDs.
+            if cid in lord_ids:
+                if 'name_pointer' in entry.fields:
+                    name_identifier = entry.get('name_pointer', 0)
+                    name_label = 'name pointer'
+                else:
+                    name_identifier = entry.get('msg_name', 0)
+                    name_label = 'name message ID'
+
+                if name_identifier == 0:
+                    self.issues.append(ValidationIssue(
+                        severity='error', category='required',
+                        character_id=cid, character_name=name,
+                        message=f'Lord character has null {name_label} (will break story).',
+                        suggestion='Do not modify required character table text identifiers.',
+                        auto_fixable=True
+                    ))
+
             # Check lords keep lord classes if setting requires
             if cid in lord_ids and self.settings.keep_lords:
                 class_id = entry.get('class_id', 0)
                 if lord_class_ids and class_id not in lord_class_ids:
                     self.issues.append(ValidationIssue(
-                        severity='warning', category='required',
+                        severity='error', category='required',  # Changed from warning to error
                         character_id=cid, character_name=name,
                         message=f'Lord character class changed to {class_id} (not a lord class).',
-                        suggestion='This may cause story script issues.',
+                        suggestion='This WILL cause story script issues. Revert to original class.',
+                        auto_fixable=True
                     ))
 
     def _check_bounds(self, char_table: ROMTable, char_meta: dict):
@@ -280,6 +439,11 @@ class ValidationEngine:
                 if orig_class is not None:
                     entry.set('class_id', orig_class)
                     issue.fixed = True
+            
+            elif issue.category == 'required' and 'null name pointer' in issue.message:
+                # Cannot auto-fix null pointers - user must rebuild with safer settings
+                # Mark as not fixable to force user attention
+                issue.auto_fixable = False
 
     def _auto_fix_weapon_rank(self, entry: TableEntry, item_table: Optional[ROMTable]):
         """Raise weapon rank to minimum needed for first weapon."""

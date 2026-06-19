@@ -1,0 +1,22 @@
+{
+  "preset_id": "story_safe",
+  "display_name": "Story Safe (Minimal Changes)",
+  "description": "Only randomizes growth rates. All other features are locked to preserve story-critical data. Recommended for translated ROMs or first-time users.",
+  "settings": {
+    "class_mode": "vanilla",
+    "keep_lords": true,
+    "keep_thieves": true,
+    "keep_dancers": true,
+    "respect_gender": true,
+    "exclude_monsters": true,
+    "bases_mode": "vanilla",
+    "growths_mode": "random",
+    "growths_variance": 15,
+    "growths_preserve_total": true,
+    "growths_min": 5,
+    "growths_max": 100,
+    "ranks_mode": "vanilla",
+    "inventory_mode": "dont_change",
+    "auto_fix": true
+  }
+}

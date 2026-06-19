@@ -1,0 +1,30 @@
+{
+  "layout_id": "fe6_item_vanilla",
+  "description": "FE6 (Japan) vanilla item (IInfo) table entry layout — 32 bytes per entry. Verified against the StanHash/fe6 decomp (SHA-1 a57095da867de4d585c33d4394712986245fe6ca).",
+  "entry_size": 32,
+  "fields": [
+    {"name": "msg_name",       "offset": 0,  "size": 2, "type": "uint16"},
+    {"name": "msg_desc",       "offset": 2,  "size": 2, "type": "uint16"},
+    {"name": "msg_desc_use",   "offset": 4,  "size": 2, "type": "uint16"},
+    {"name": "item_id",        "offset": 6,  "size": 1, "type": "uint8"},
+    {"name": "kind",           "offset": 7,  "size": 1, "type": "uint8"},
+    {"name": "attributes",     "offset": 8,  "size": 2, "type": "uint16"},
+    {"name": "padding_a",      "offset": 10, "size": 2, "type": "uint8"},
+    {"name": "bonuses",        "offset": 12, "size": 4, "type": "pointer"},
+    {"name": "effectiveness",  "offset": 16, "size": 4, "type": "pointer"},
+    {"name": "uses",           "offset": 20, "size": 1, "type": "uint8"},
+    {"name": "might",          "offset": 21, "size": 1, "type": "uint8"},
+    {"name": "hit",            "offset": 22, "size": 1, "type": "uint8"},
+    {"name": "weight",         "offset": 23, "size": 1, "type": "uint8"},
+    {"name": "crit",           "offset": 24, "size": 1, "type": "uint8"},
+    {"name": "encoded_range",  "offset": 25, "size": 1, "type": "uint8"},
+    {"name": "cost_per_use",   "offset": 26, "size": 2, "type": "uint16"},
+    {"name": "required_wexp",  "offset": 28, "size": 1, "type": "uint8"},
+    {"name": "icon",           "offset": 29, "size": 1, "type": "uint8"},
+    {"name": "item_effect",    "offset": 30, "size": 1, "type": "uint8"},
+    {"name": "weapon_effect",  "offset": 31, "size": 1, "type": "uint8"}
+  ],
+  "stat_fields": {
+    "bases": []
+  }
+}

@@ -85,38 +85,60 @@ class MainWindow(QMainWindow):
         self._connect_signals()
 
     def _apply_dark_theme(self):
-        """Apply a polished dark theme."""
+        """Apply a comprehensive dark theme covering all widget types."""
         self.setStyleSheet("""
-            QMainWindow { background: #0f0f1a; }
-            QWidget { color: #e0e0e0; font-family: 'Segoe UI', sans-serif; font-size: 12px; }
+            /* ── Base ── */
+            QMainWindow, QDialog {
+                background: #0f0f1a;
+            }
+            QWidget {
+                color: #e0e0e0;
+                background: #0f0f1a;
+                font-family: 'Segoe UI', 'Arial', sans-serif;
+                font-size: 12px;
+            }
+
+            /* ── GroupBox ── */
             QGroupBox {
                 border: 1px solid #303050;
                 border-radius: 6px;
-                margin-top: 8px;
-                padding-top: 16px;
+                margin-top: 10px;
+                padding-top: 18px;
                 font-weight: bold;
                 color: #90caf9;
+                background: #12121f;
             }
-            QGroupBox::title { subcontrol-origin: margin; left: 12px; padding: 0 6px; }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 12px;
+                padding: 0 6px;
+                color: #90caf9;
+            }
+
+            /* ── Buttons ── */
             QPushButton {
                 background: #283593;
                 border: none;
                 border-radius: 4px;
                 padding: 7px 18px;
-                color: white;
+                color: #ffffff;
                 font-weight: bold;
             }
             QPushButton:hover { background: #3949ab; }
             QPushButton:pressed { background: #1a237e; }
-            QPushButton:disabled { background: #37474f; color: #78909c; }
+            QPushButton:disabled { background: #2a2a3a; color: #555570; }
             QPushButton#buildBtn {
                 background: #2e7d32;
                 font-size: 14px;
                 padding: 10px 24px;
+                color: #ffffff;
             }
             QPushButton#buildBtn:hover { background: #388e3c; }
-            QPushButton#previewBtn { background: #00695c; }
+            QPushButton#buildBtn:disabled { background: #1b3a1d; color: #556b55; }
+            QPushButton#previewBtn { background: #00695c; color: #ffffff; }
             QPushButton#previewBtn:hover { background: #00897b; }
+
+            /* ── Text Inputs ── */
             QLineEdit {
                 background: #1a1a2e;
                 border: 1px solid #303050;
@@ -125,6 +147,9 @@ class MainWindow(QMainWindow):
                 color: #e0e0e0;
             }
             QLineEdit:focus { border-color: #5c6bc0; }
+            QLineEdit:disabled { background: #141420; color: #555570; }
+
+            /* ── ComboBox ── */
             QComboBox {
                 background: #1a1a2e;
                 border: 1px solid #303050;
@@ -132,15 +157,107 @@ class MainWindow(QMainWindow):
                 padding: 5px 8px;
                 color: #e0e0e0;
             }
-            QComboBox::drop-down { border: none; }
+            QComboBox:hover { border-color: #5c6bc0; }
+            QComboBox::drop-down {
+                border: none;
+                width: 20px;
+            }
+            QComboBox::down-arrow {
+                width: 10px;
+                height: 10px;
+            }
             QComboBox QAbstractItemView {
                 background: #1a1a2e;
                 border: 1px solid #303050;
                 color: #e0e0e0;
                 selection-background-color: #283593;
+                selection-color: #ffffff;
+                outline: none;
             }
-            QRadioButton { spacing: 6px; }
-            QRadioButton::indicator { width: 14px; height: 14px; }
+
+            /* ── CheckBox ── */
+            QCheckBox {
+                color: #e0e0e0;
+                background: transparent;
+                spacing: 6px;
+            }
+            QCheckBox:disabled { color: #555570; }
+            QCheckBox::indicator {
+                width: 14px;
+                height: 14px;
+                border: 1px solid #5c6bc0;
+                border-radius: 3px;
+                background: #1a1a2e;
+            }
+            QCheckBox::indicator:checked {
+                background: #5c6bc0;
+                border-color: #7986cb;
+            }
+            QCheckBox::indicator:hover {
+                border-color: #7986cb;
+                background: #252545;
+            }
+
+            /* ── RadioButton ── */
+            QRadioButton {
+                color: #e0e0e0;
+                background: transparent;
+                spacing: 6px;
+            }
+            QRadioButton::indicator {
+                width: 14px;
+                height: 14px;
+                border: 1px solid #5c6bc0;
+                border-radius: 7px;
+                background: #1a1a2e;
+            }
+            QRadioButton::indicator:checked {
+                background: #5c6bc0;
+                border-color: #7986cb;
+            }
+
+            /* ── SpinBox ── */
+            QSpinBox, QDoubleSpinBox {
+                background: #1a1a2e;
+                border: 1px solid #303050;
+                border-radius: 4px;
+                padding: 4px 6px;
+                color: #e0e0e0;
+            }
+            QSpinBox:focus, QDoubleSpinBox:focus { border-color: #5c6bc0; }
+            QSpinBox::up-button, QSpinBox::down-button,
+            QDoubleSpinBox::up-button, QDoubleSpinBox::down-button {
+                background: #252545;
+                border: none;
+                width: 16px;
+            }
+            QSpinBox::up-button:hover, QSpinBox::down-button:hover,
+            QDoubleSpinBox::up-button:hover, QDoubleSpinBox::down-button:hover {
+                background: #303060;
+            }
+
+            /* ── Slider ── */
+            QSlider::groove:horizontal {
+                border: 1px solid #303050;
+                height: 4px;
+                background: #252545;
+                border-radius: 2px;
+            }
+            QSlider::handle:horizontal {
+                background: #5c6bc0;
+                border: none;
+                width: 14px;
+                height: 14px;
+                border-radius: 7px;
+                margin: -5px 0;
+            }
+            QSlider::handle:horizontal:hover { background: #7986cb; }
+            QSlider::sub-page:horizontal {
+                background: #3949ab;
+                border-radius: 2px;
+            }
+
+            /* ── Tabs ── */
             QTabWidget::pane {
                 border: 1px solid #303050;
                 border-radius: 4px;
@@ -159,35 +276,172 @@ class MainWindow(QMainWindow):
             QTabBar::tab:selected {
                 background: #12121f;
                 color: #90caf9;
-                border-bottom: 2px solid #5c6bc0;
+                font-weight: bold;
             }
-            QTabBar::tab:hover { color: #bbdefb; }
-            QProgressBar {
-                border: 1px solid #303050;
-                border-radius: 4px;
-                background: #1a1a2e;
-                text-align: center;
-                color: white;
+            QTabBar::tab:hover { color: #bbdefb; background: #1e1e38; }
+
+            /* ── ScrollArea ── */
+            QScrollArea {
+                background: #12121f;
+                border: none;
             }
-            QProgressBar::chunk {
-                background: #2e7d32;
-                border-radius: 3px;
+            QScrollArea > QWidget > QWidget {
+                background: #12121f;
             }
-            QSplitter::handle {
-                background: #303050;
-                width: 2px;
-            }
+
+            /* ── ScrollBars ── */
             QScrollBar:vertical {
                 background: #12121f;
                 width: 10px;
                 border: none;
+                margin: 0;
             }
             QScrollBar::handle:vertical {
                 background: #37474f;
                 border-radius: 5px;
                 min-height: 30px;
             }
+            QScrollBar::handle:vertical:hover { background: #546e7a; }
             QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical { height: 0; }
+            QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical { background: none; }
+            QScrollBar:horizontal {
+                background: #12121f;
+                height: 10px;
+                border: none;
+                margin: 0;
+            }
+            QScrollBar::handle:horizontal {
+                background: #37474f;
+                border-radius: 5px;
+                min-width: 30px;
+            }
+            QScrollBar::handle:horizontal:hover { background: #546e7a; }
+            QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal { width: 0; }
+            QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal { background: none; }
+
+            /* ── TextEdit / PlainTextEdit ── */
+            QTextEdit, QPlainTextEdit {
+                background: #0a0a14;
+                border: 1px solid #303050;
+                border-radius: 4px;
+                color: #b0bec5;
+                selection-background-color: #283593;
+                selection-color: #ffffff;
+            }
+
+            /* ── ListView / TreeView / TableView ── */
+            QListView, QListWidget {
+                background: #12121f;
+                border: 1px solid #303050;
+                border-radius: 4px;
+                color: #e0e0e0;
+                outline: none;
+            }
+            QListView::item, QListWidget::item {
+                padding: 4px 8px;
+                border-radius: 3px;
+            }
+            QListView::item:selected, QListWidget::item:selected {
+                background: #283593;
+                color: #ffffff;
+            }
+            QListView::item:hover, QListWidget::item:hover {
+                background: #1e1e38;
+            }
+            QTreeView, QTreeWidget {
+                background: #12121f;
+                border: 1px solid #303050;
+                color: #e0e0e0;
+                outline: none;
+            }
+            QTreeView::item:selected, QTreeWidget::item:selected {
+                background: #283593;
+                color: #ffffff;
+            }
+            QTreeView::item:hover, QTreeWidget::item:hover {
+                background: #1e1e38;
+            }
+            QTableView, QTableWidget {
+                background: #12121f;
+                border: 1px solid #303050;
+                color: #e0e0e0;
+                gridline-color: #252545;
+                outline: none;
+            }
+            QTableView::item:selected, QTableWidget::item:selected {
+                background: #283593;
+                color: #ffffff;
+            }
+            QHeaderView::section {
+                background: #1a1a2e;
+                color: #90caf9;
+                border: 1px solid #303050;
+                padding: 4px 8px;
+                font-weight: bold;
+            }
+
+            /* ── Label ── */
+            QLabel {
+                color: #e0e0e0;
+                background: transparent;
+            }
+
+            /* ── ProgressBar ── */
+            QProgressBar {
+                border: 1px solid #303050;
+                border-radius: 4px;
+                background: #1a1a2e;
+                text-align: center;
+                color: #ffffff;
+                font-weight: bold;
+            }
+            QProgressBar::chunk {
+                background: #2e7d32;
+                border-radius: 3px;
+            }
+
+            /* ── Splitter ── */
+            QSplitter::handle {
+                background: #303050;
+            }
+            QSplitter::handle:horizontal { width: 2px; }
+            QSplitter::handle:vertical { height: 2px; }
+
+            /* ── Frame ── */
+            QFrame {
+                background: transparent;
+            }
+            QFrame[frameShape="4"], QFrame[frameShape="5"] {
+                color: #303050;
+            }
+
+            /* ── Tooltip ── */
+            QToolTip {
+                background: #1a1a2e;
+                color: #e0e0e0;
+                border: 1px solid #5c6bc0;
+                padding: 4px 8px;
+            }
+
+            /* ── StatusBar ── */
+            QStatusBar {
+                background: #0a0a14;
+                color: #78909c;
+                border-top: 1px solid #303050;
+            }
+
+            /* ── MenuBar ── */
+            QMenuBar {
+                background: #0f0f1a;
+                color: #e0e0e0;
+            }
+            QMenuBar::item:selected { background: #1a1a2e; }
+            QMenu {
+                background: #1a1a2e;
+                border: 1px solid #303050;
+                color: #e0e0e0;
+            }
+            QMenu::item:selected { background: #283593; }
         """)
 
     def _build_ui(self):
@@ -351,7 +605,7 @@ class MainWindow(QMainWindow):
         left_layout.addWidget(self.progress_bar)
 
         self.status_label = QLabel("")
-        self.status_label.setStyleSheet("font-size: 11px; color: #78909c; padding: 2px;")
+        self.status_label.setStyleSheet("font-size: 11px; color: #b0bec5; padding: 2px; background: transparent;")
         left_layout.addWidget(self.status_label)
 
         left_layout.addStretch()
@@ -443,8 +697,28 @@ class MainWindow(QMainWindow):
 
             self.rom_hash_label.setText(f"SHA-1: {rom.sha1[:20]}...\nCRC32: {rom.crc32}")
 
+            # Translation-patch banner: prominently warn the user
+            translation_meta = (profile.get('translation_metadata') or {})
+            if translation_meta.get('is_translation_patch'):
+                warnings = profile.get('warnings') or []
+                banner_text = (
+                    "⚠ TRANSLATION PATCH DETECTED — SAFE MODE ACTIVE\n\n"
+                    "Destructive randomization (classes, bases, ranks, "
+                    "inventory) has been disabled to protect this ROM.\n"
+                    "Only growth-rate randomization is available."
+                )
+                detail = "\n".join("• " + w for w in warnings) if warnings else ""
+                try:
+                    QMessageBox.warning(
+                        self, "Translation Patch Detected",
+                        banner_text + ("\n\n" + detail if detail else "")
+                    )
+                except Exception:
+                    pass
+
             self.preview_btn.setEnabled(True)
             self.build_btn.setEnabled(True)
+            self.status_label.setStyleSheet("font-size: 11px; color: #66bb6a; padding: 2px; background: transparent; font-weight: bold;")
             self.status_label.setText(f"✅ ROM loaded — {profile.get('display_name', 'Unknown')}")
 
             # Update tabs
@@ -458,6 +732,7 @@ class MainWindow(QMainWindow):
             default_dir = os.path.dirname(self.state.rom_path)
             self.output_path_edit.setText(os.path.join(default_dir, default_name))
         else:
+            self.status_label.setStyleSheet("font-size: 11px; color: #ef5350; padding: 2px; background: transparent; font-weight: bold;")
             self.status_label.setText(f"❌ {message}")
             QMessageBox.warning(self, "ROM Load Error", message)
 
@@ -559,6 +834,7 @@ class MainWindow(QMainWindow):
 
     def _on_build_progress(self, value: int, message: str):
         self.progress_bar.setValue(value)
+        self.status_label.setStyleSheet("font-size: 11px; color: #b0bec5; padding: 2px; background: transparent;")
         self.status_label.setText(message)
 
     def _on_build_finished(self, success: bool, message: str):
@@ -568,10 +844,12 @@ class MainWindow(QMainWindow):
 
         if success:
             self.open_folder_btn.setEnabled(True)
+            self.status_label.setStyleSheet("font-size: 11px; color: #66bb6a; padding: 2px; background: transparent; font-weight: bold;")
             self.status_label.setText(f"✅ {message}")
             self.logs_tab.refresh()
             QMessageBox.information(self, "Build Complete", message)
         else:
+            self.status_label.setStyleSheet("font-size: 11px; color: #ef5350; padding: 2px; background: transparent; font-weight: bold;")
             self.status_label.setText(f"❌ {message}")
             self.safety_tab.refresh()
             QMessageBox.critical(self, "Build Failed", message)

@@ -1,63 +1,40 @@
-# Fire Emblem GBA Character Randomizer — Build Plan
+# Translated FE6 ROM Support — Fix Plan
 
-## Phase 1: Project Foundation [x]
-- [x] Create project directory structure
-- [x] Create requirements.txt and build configuration
-- [x] Create profile JSON schema and initial profiles (FE7, FE8)
-- [x] Create layout definitions for vanilla table structures
-- [x] Create placeholder portrait assets system
+## Phase A: Profile & Hash Detection [x]
+- [x] Identify translated FE6 ROM SHA-1 (32605fd456677ef740f8d521e9a3894ace4bc59c)
+- [x] Identify translated FE6 ROM CRC32 (99B8B6D7)
+- [x] Confirm translation patch relocates internal data tables
+- [x] Create `src/profiles/fe6_translated_safe.json` with feature_flags disabling unsafe ops
+- [x] Verify ProfileManager.match_rom() hits the new profile via SHA-1
 
-## Phase 2: Core Engine [x]
-- [x] Implement ROM loader with hash detection and profile matching
-- [x] Implement table reader/writer (characters, classes, items)
-- [x] Implement RNG engine (deterministic seed-based)
-- [x] Implement class randomization logic
-- [x] Implement bases randomization logic
-- [x] Implement growths randomization logic
-- [x] Implement weapon ranks randomization logic
-- [x] Implement starting inventory logic
-- [x] Implement validation engine (safety checks, auto-fix)
-- [x] Implement spoiler log generator (txt + json)
+## Phase B: Engine Hardening [x]
+- [x] Engine respects feature_flags for class/bases/growths/ranks/inventory passes
+- [x] Engine emits clear warnings when running on a translation_metadata profile
+- [x] Engine performs sanity-check on character table after load
+- [x] Engine force-disables destructive flags when sanity check fails
 
-## Phase 3: Patch Generation [x]
-- [x] Implement BPS patch generation
-- [x] Implement UPS patch generation
-- [x] Implement ROM writer (atomic write with temp file)
+## Phase C: Validation Hardening [x]
+- [x] Added translation-patch awareness to ValidationEngine
+- [x] Added "table sanity" pre-check that flags impossible stat values
+- [x] Validation correctly catches Roy HP=-19 on translated ROM
 
-## Phase 4: Preset & Settings System [x]
-- [x] Implement preset JSON load/save
-- [x] Implement shareable settings string (base64 encode/decode)
-- [x] Create default presets (Casual, Balanced, Chaos, etc.)
+## Phase D: UI Warnings [x]
+- [x] Show prominent warning banner (QMessageBox) when translated profile is active
 
-## Phase 5: GUI — Main Window & Layout [x]
-- [x] Create main window with left Build panel + right tabs
-- [x] Implement ROM picker with drag/drop
-- [x] Implement ROM info display (title, region, tier badge, hashes)
-- [x] Implement output mode selector (ROM/BPS/UPS)
-- [x] Implement seed controls (text box, random, copy)
-- [x] Implement presets dropdown
-- [x] Implement Build/Preview/Open folder buttons
+## Phase E: Layout / Profile Schema Cleanup [x]
+- [x] Added fe6_class_vanilla.json and fe6_item_vanilla.json layouts
+- [x] Trimmed item layout to 32 bytes (FE6 items, not 36 like FE7/FE8)
+- [x] Made tables.py 'size' field optional via .get()
 
-## Phase 6: GUI — Tabs [x]
-- [x] Characters tab (portrait list + detail panel + locks)
-- [x] Classes tab (class pool checklist, weights)
-- [x] Stats tab (bases/growths sliders and modes)
-- [x] Items tab (inventory options)
-- [x] Safety tab (warnings/errors panel)
-- [x] Advanced tab (force build, tier C options)
-- [x] Preview tab (before/after table with filters and color coding)
-- [x] Logs tab (spoiler log viewer)
+## Phase F: Commit & Push [x]
+- [x] Committed all changes with descriptive message (commit 7f844b5)
+- [x] Pushed branch to GitHub via x-access-token
+- [x] Opened Pull Request #3 (retargeted at feature/fegba-randomizer-v1)
+- [x] PR diff is clean: +1181 / -95 (only the safe-mode work)
 
-## Phase 7: Integration & Threading [x]
-- [x] Wire up QThread for ROM load
-- [x] Wire up QThread for preview generation
-- [x] Wire up QThread for build process
-- [x] Connect all UI signals to engine
-- [x] End-to-end test flow
-
-## Phase 8: Polish & Packaging [x]
-- [x] Create application icon and branding
-- [x] Create Nuitka build script
-- [x] Create portable ZIP packaging script
-- [x] Final testing and documentation
-- [x] Create README with usage instructions
+## Verification Summary
+- Profile matches translated ROM by SHA-1 (tier C)
+- All 3 tables load (227 chars / 75 classes / 128 items)
+- Engine: 8 warnings, 0 errors, 43 changes (growths-only)
+- Validation: 51 issues (7 translation, 41 sanity, 3 weapon, 4 bounds)
+- All other profiles still load unchanged

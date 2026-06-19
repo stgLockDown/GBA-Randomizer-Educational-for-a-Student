@@ -43,6 +43,25 @@ def main():
     window = MainWindow(state)
     window.show()
 
+    # After window is shown, check if loaded profile has translation warnings
+    def _check_translation_warning(success, message):
+        if success and state.profile:
+            translation_meta = state.profile.get('translation_metadata', {})
+            if translation_meta.get('is_translation_patch', False):
+                warnings = state.profile.get('warnings', [])
+                if warnings:
+                    from PySide6.QtWidgets import QMessageBox
+                    warning_text = "\n".join(f"• {w}" for w in warnings)
+                    QMessageBox.warning(
+                        window,
+                        "Translation-Patched ROM Detected",
+                        f"This ROM uses a translation patch with known limitations:\n\n"
+                        f"{warning_text}\n\n"
+                        f"Some randomization features have been automatically disabled for safety.",
+                    )
+
+    state.rom_loaded.connect(_check_translation_warning)
+
     sys.exit(app.exec())
 
 
